@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Путешествие в Японию 2026 🌸</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #FFF8F0 0%, #FFE8E8 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 20px;
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 10px 40px rgba(255, 107, 157, 0.15);
+        }
+
+        .header h1 {
+            font-size: 3em;
+            font-weight: 300;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .header h1 .emoji {
+            font-size: 1.2em;
+        }
+
+        .header .dates {
+            font-size: 1.3em;
+            color: #FF6B9D;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .header .route {
+            font-size: 1em;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        .nav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 40px;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(255, 107, 157, 0.15);
+            border-bottom: 3px solid #FFB7C5;
+        }
+
+        .nav-btn {
+            padding: 12px 24px;
+            background: white;
+            border: 2px solid #FFB7C5;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 15px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .nav-btn:hover {
+            background: #FFB7C5;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 157, 0.3);
+        }
+
+        /* Timeline */
+        .timeline-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .section-title {
+            font-size: 2em;
+            color: #FF6B9D;
+            margin-bottom: 30px;
+            font-weight: 300;
+            text-align: center;
+        }
+
+        /* Timeline Calendar */
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding: 20px 0;
+        }
+
+        .calendar-week {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+        }
+
+        .calendar-day {
+            padding: 15px;
+            background: linear-gradient(135deg, #FFF8F0 0%, #FFE8E8 100%);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            border: 2px solid transparent;
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .calendar-day:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 107, 157, 0.25);
+            border-color: #FFB7C5;
+        }
+
+        .calendar-day.active {
+            background: linear-gradient(135deg, #FFB7C5 0%, #FF6B9D 100%);
+            color: white;
+            border-color: #FF6B9D;
+        }
+
+        .calendar-day.empty {
+            background: transparent;
+            cursor: default;
+            border: none;
+        }
+
+        .calendar-day.empty:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
+        .calendar-day .weekday {
+            font-size: 0.75em;
+            opacity: 0.7;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .calendar-day .day-number {
+            font-size: 1.3em;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .calendar-day .day-date {
+            font-size: 0.75em;
+            opacity: 0.8;
+            margin-bottom: 8px;
+        }
+
+        .calendar-day .day-city {
+            font-size: 0.85em;
+            font-weight: 500;
+        }
+
+        .calendar-day .intensity {
+            margin-top: 8px;
+            padding: 3px 8px;
+            border-radius: 8px;
+            font-size: 0.7em;
+            display: inline-block;
+        }
+
+        .calendar-day .intensity.light {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .calendar-day .intensity.medium {
+            background: rgba(255, 183, 197, 0.4);
+        }
+
+        .calendar-day .intensity.hard {
+            background: rgba(255, 107, 157, 0.4);
+        }
+
+        .calendar-day.active .intensity {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Day Cards */
+        .days-section {
+            margin-bottom: 40px;
+        }
+
+        .day-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.06);
+            transition: all 0.3s;
+        }
+
+        .day-card:hover {
+            box-shadow: 0 10px 30px rgba(255, 107, 157, 0.2);
+        }
+
+        .day-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .day-card-title {
+            font-size: 1.5em;
+            color: #FF6B9D;
+            font-weight: 400;
+        }
+
+        .day-card-date {
+            font-size: 0.95em;
+            color: #666;
+        }
+
+        .day-card-content {
+            line-height: 1.6;
+            font-size: 0.95em;
+        }
+
+        .day-card-content h3 {
+            color: #FF6B9D;
+            margin-top: 12px;
+            margin-bottom: 8px;
+            font-weight: 400;
+            font-size: 1.1em;
+        }
+
+        .day-card-content ul {
+            list-style: none;
+            padding-left: 0;
+            margin: 8px 0;
+        }
+
+        .day-card-content li {
+            padding: 4px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .day-card-content li:before {
+            content: '🌸';
+            position: absolute;
+            left: 0;
+        }
+
+        .day-card-content .note {
+            background: #FFF8F0;
+            padding: 10px 12px;
+            border-radius: 8px;
+            margin-top: 10px;
+            border-left: 3px solid #FFB7C5;
+            font-size: 0.9em;
+        }
+
+        /* Info Cards */
+        .info-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .info-card-title {
+            font-size: 1.8em;
+            color: #FF6B9D;
+            margin-bottom: 25px;
+            font-weight: 300;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table th {
+            background: #FFF8F0;
+            padding: 15px;
+            text-align: left;
+            color: #FF6B9D;
+            font-weight: 500;
+            border-bottom: 2px solid #FFB7C5;
+        }
+
+        table td {
+            padding: 15px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        table tr:hover {
+            background: #FFF8F0;
+        }
+
+        table a {
+            color: #FF6B9D;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        table a:hover {
+            text-decoration: underline;
+        }
+
+        /* Grid Layout */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .header .dates {
+                font-size: 1.1em;
+            }
+
+            .header .route {
+                font-size: 0.9em;
+            }
+
+            .nav {
+                gap: 8px;
+                padding: 10px;
+            }
+
+            .nav-btn {
+                padding: 8px 12px;
+                font-size: 0.85em;
+            }
+
+            .calendar-week {
+                grid-template-columns: repeat(7, 1fr);
+                gap: 5px;
+            }
+
+            .calendar-day {
+                padding: 8px 4px;
+                min-height: 80px;
+                font-size: 0.8em;
+            }
+
+            .calendar-day .day-number {
+                font-size: 1.1em;
+            }
+
+            .calendar-day .day-city {
+                font-size: 0.75em;
+            }
+
+            .calendar-day .intensity {
+                font-size: 0.65em;
+                padding: 2px 5px;
+            }
+
+            .day-card {
+                padding: 15px 20px;
+            }
+
+            .info-card {
+                padding: 20px;
+            }
+
+            table {
+                font-size: 12px;
+            }
+
+            table th, table td {
+                padding: 8px 5px;
+            }
+
+            .map-city {
+                padding: 15px;
+            }
+
+            .map-city-marker {
+                width: 35px;
+                height: 35px;
+                font-size: 1em;
+            }
+
+            .map-city-name {
+                font-size: 1.1em;
+            }
+
+            .map-city-dates {
+                font-size: 0.85em;
+            }
+
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Route Map */
+        #map {
+            height: 500px;
+            width: 100%;
+            border-radius: 15px;
+            border: 3px solid #FFB7C5;
+            box-shadow: 0 5px 20px rgba(255, 107, 157, 0.2);
+        }
+
+        .leaflet-popup-content-wrapper {
+            border-radius: 10px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.2);
+        }
+
+        .leaflet-popup-content {
+            margin: 15px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .popup-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #FF6B9D;
+            margin-bottom: 8px;
+        }
+
+        .popup-dates {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .popup-icon {
+            font-size: 1.5em;
+            margin-bottom: 8px;
+        }
+
+        /* Utility Classes */
+        .text-center {
+            text-align: center;
+        }
+
+        .mb-20 {
+            margin-bottom: 20px;
+        }
+
+        .mt-20 {
+            margin-top: 20px;
+        }
+
+        /* Smooth Scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Section Spacing */
+        section {
+            scroll-margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1><span class="emoji">🇯🇵</span> Путешествие в Японию <span class="emoji">🌸</span></h1>
+            <div class="dates">13 – 29 марта 2026</div>
+            <div class="route">
+                Пекин → Киото → Хиросима → Беппу → Кумамото → Осака → Пекин
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="nav">
+            <button class="nav-btn" onclick="scrollToSection('timeline')">Таймлайн</button>
+            <button class="nav-btn" onclick="scrollToSection('map-section')">Карта</button>
+            <button class="nav-btn" onclick="scrollToSection('days')">Маршрут</button>
+            <button class="nav-btn" onclick="scrollToSection('accommodation')">Жильё</button>
+            <button class="nav-btn" onclick="scrollToSection('transport')">Транспорт</button>
+            <button class="nav-btn" onclick="scrollToSection('useful')">Полезное</button>
+        </div>
+
+        <!-- Timeline Section -->
+        <section id="timeline" class="timeline-section">
+            <h2 class="section-title">Календарь путешествия</h2>
+            <div class="timeline" id="timelineContainer">
+                <!-- Will be populated by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Map Section -->
+        <section id="map-section" class="info-card">
+            <h2 class="info-card-title">🗺️ Карта маршрута по Японии</h2>
+            <div id="map"></div>
+        </section>
+
+        <!-- Days Section -->
+        <section id="days" class="days-section">
+            <div id="daysContainer">
+                <!-- Will be populated by JavaScript -->
+            </div>
+        </section>
+
+
+        <!-- Accommodation Section -->
+        <section id="accommodation" class="info-card">
+            <h2 class="info-card-title">🏨 Жильё</h2>
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Город</th>
+                            <th>Отель</th>
+                            <th>Адрес</th>
+                            <th>Даты</th>
+                            <th>Check-in / Check-out</th>
+                            <th>Завтрак</th>
+                            <th>Стоимость</th>
+                            <th>№ брони</th>
+                            <th>✓</th>
+                        </tr>
+                    </thead>
+                    <tbody id="accommodationTable">
+                        <!-- Will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Transport Section -->
+        <section id="transport" class="info-card">
+            <h2 class="info-card-title">🚄 Транспорт в Японии</h2>
+            
+            <div class="grid-2">
+                <div>
+                    <h3 style="color: #FF6B9D; margin-bottom: 15px;">JR Pass</h3>
+                    <div class="note">
+                        <strong>Нужен!</strong> Выбрать между 7 или 14 дней (сравнить стоимость с маршрутом)
+                    </div>
+                    
+                    <h3 style="color: #FF6B9D; margin-top: 25px; margin-bottom: 15px;">Suica / Pasmo</h3>
+                    <div class="note">
+                        Да, обязательно! Для метро и местного транспорта
+                    </div>
+                </div>
+
+                <div>
+                    <h3 style="color: #FF6B9D; margin-bottom: 15px;">Основные маршруты</h3>
+                    <ul>
+                        <li>Аэропорт KIX → Киото (Nankai / JR)</li>
+                        <li>Киото → Окаяма (синкансэн)</li>
+                        <li>Окаяма → Курасики (местный поезд)</li>
+                        <li>Курасики → Хиросима (синкансэн)</li>
+                        <li>Хиросима → Миядзима (паром)</li>
+                        <li>Хиросима → Беппу (синкансэн + limited express)</li>
+                        <li>Беппу → Кумамото (поезд)</li>
+                        <li>Кумамото → вулкан Асо (автобус/поезд)</li>
+                        <li>Кумамото → Осака (синкансэн)</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+
+
+        <!-- Useful Info Section -->
+        <section id="useful" class="info-card">
+            <h2 class="info-card-title">📱 Полезная информация</h2>
+            
+            <div class="grid-2">
+                <div>
+                    <h3 style="color: #FF6B9D; margin-bottom: 15px;">Приложения</h3>
+                    <ul>
+                        <li>Google Maps</li>
+                        <li>Google Translate (офлайн)</li>
+                        <li>Japan Travel</li>
+                        <li>Hyperdia / Navitime</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 style="color: #FF6B9D; margin-bottom: 15px;">Заметки и идеи</h3>
+                    <ul>
+                        <li>Проверить прогноз сакуры за 7–10 дней</li>
+                        <li>Забронировать кимоно заранее</li>
+                        <li>Проверить правила онсенов (тату)</li>
+                        <li>Изучить этикет в храмах</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3 style="color: #FF6B9D; margin-top: 30px; margin-bottom: 15px;">💴 Валюта и деньги</h3>
+            <div class="note">
+                <p><em>Информация будет добавлена позже</em></p>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Data
+        const tripData = {
+            days: [
+                {
+                    number: 0,
+                    date: '12 марта',
+                    weekday: 'четверг',
+                    city: 'В пути',
+                    intensity: 'light',
+                    activities: [
+                        '✈️ Катя: вылет из Мадрида',
+                        'MAD 09:45 → AUH 19:20',
+                        'Ночная пересадка в Абу-Даби',
+                        'Ночь в аэропорту/отеле'
+                    ],
+                    notes: 'Катя начинает путешествие. Таня еще в Москве.'
+                },
+                {
+                    number: 1,
+                    date: '13 марта',
+                    weekday: 'пятница',
+                    city: 'В пути',
+                    intensity: 'light',
+                    activities: [
+                        '✈️ Таня: вылет из Москвы (SVO) 21:05 → Пекин (PKX)',
+                        '✈️ Катя: вылет из Абу-Даби (AUH) 21:20 → Пекин (PKX)',
+                        'Обе в ночных рейсах, прилетают 14 марта утром'
+                    ],
+                    notes: 'Обе в полёте. Таня — прямой рейс Аэрофлот 7ч45м. Катя — Etihad 7ч25м.'
+                },
+                {
+                    number: 2,
+                    date: '14 марта',
+                    weekday: 'суббота',
+                    city: 'Пекин',
+                    intensity: 'light',
+                    activities: [
+                        '✈️ Прилет утром:',
+                        'Катя прилетает в 08:45 (PKX)',
+                        'Таня прилетает в 09:50 (PKX)',
+                        'Встреча в аэропорту!',
+                        'Трансфер в отель (Airport Express → Dongzhimen ~25 мин)',
+                        'Гуляем по Пекину',
+                        'Адаптируемся к часовому поясу'
+                    ],
+                    notes: 'Легкий день адаптации после перелета. Катя прилетает на час раньше Тани.'
+                },
+                {
+                    number: 3,
+                    date: '15 марта',
+                    weekday: 'воскресенье',
+                    city: 'Пекин',
+                    intensity: 'medium',
+                    activities: [
+                        'Великая китайская стена (Mutianyu)',
+                        'Выезд утром',
+                        'Возвращение к вечеру'
+                    ],
+                    notes: 'Главная достопримечательность Пекина'
+                },
+                {
+                    number: 4,
+                    date: '16 марта',
+                    weekday: 'понедельник',
+                    city: 'Киото',
+                    intensity: 'light',
+                    activities: [
+                        '✈️ Ранний рейс Пекин → Осака',
+                        'Вылет: 08:45 (PEK)',
+                        'Прилет: 12:35 (KIX)',
+                        'В пути: 2ч 50м',
+                        'Трансфер в Киото (Nankai/JR ~1.5ч)',
+                        'Заселение в Tokyu Stay Kyoto (c 15:00)',
+                        'Вечерняя прогулка по району'
+                    ],
+                    notes: 'День переезда в Японию! Ранний подъем, успеем заселиться и погулять вечером.'
+                },
+                {
+                    number: 5,
+                    date: '17 марта',
+                    weekday: 'вторник',
+                    city: 'Киото',
+                    intensity: 'hard',
+                    activities: [
+                        'Храмы Киото',
+                        'Хигасияма',
+                        'Киёмидзу-дэра',
+                        'Район Гион',
+                        'Fushimi Inari (рано утром или на закате)'
+                    ],
+                    notes: 'Насыщенный день с храмами и садами'
+                },
+                {
+                    number: 6,
+                    date: '18 марта',
+                    weekday: 'среда',
+                    city: 'Киото',
+                    intensity: 'medium',
+                    activities: [
+                        'Фотосессия в кимоно',
+                        'Прогулка по традиционным районам',
+                        'Дополнительные храмы по желанию'
+                    ],
+                    notes: 'Забронировать кимоно заранее!'
+                },
+                {
+                    number: 7,
+                    date: '19 марта',
+                    weekday: 'четверг',
+                    city: 'Осака (Universal)',
+                    intensity: 'hard',
+                    activities: [
+                        'Поездка в Universal Studios Japan',
+                        'Дневной выезд из Киото (~30 мин на поезде)',
+                        'Весь день в парке',
+                        'Возвращение в Киото вечером'
+                    ],
+                    notes: 'День в Universal Studios! Купить билеты заранее.'
+                },
+                {
+                    number: 8,
+                    date: '20 марта',
+                    weekday: 'пятница',
+                    city: 'Хиросима',
+                    intensity: 'medium',
+                    activities: [
+                        'Выезд из Киото → Хиросима (синкансэн)',
+                        'Заселение в Oriental Hotel Hiroshima (c 24:00)',
+                        'Мемориальный парк мира',
+                        'Купол атомной бомбы',
+                        'Вечерняя прогулка'
+                    ],
+                    notes: 'Переезд в Хиросиму. Один из самых сильных дней поездки.'
+                },
+                {
+                    number: 9,
+                    date: '21 марта',
+                    weekday: 'суббота',
+                    city: 'Хиросима',
+                    intensity: 'hard',
+                    activities: [
+                        'Утром паром на Миядзиму',
+                        'Святилище Ицукусима',
+                        'Прогулка по острову',
+                        'Возвращение в Хиросиму'
+                    ],
+                    notes: 'Целый день на острове Миядзима'
+                },
+                {
+                    number: 10,
+                    date: '22 марта',
+                    weekday: 'воскресенье',
+                    city: 'Беппу',
+                    intensity: 'light',
+                    activities: [
+                        'Утренний переезд Хиросима → Беппу',
+                        'Заселение в Amanek Beppu (c 15:00)',
+                        'Приватный онсен',
+                        'Релакс'
+                    ],
+                    notes: 'Начало онсен-релакса!'
+                },
+                {
+                    number: 11,
+                    date: '23 марта',
+                    weekday: 'понедельник',
+                    city: 'Беппу',
+                    intensity: 'light',
+                    activities: [
+                        'Полный день онсенов',
+                        'Прогулки по природе',
+                        'Отдых и релакс'
+                    ],
+                    notes: 'Продолжаем наслаждаться онсенами'
+                },
+                {
+                    number: 12,
+                    date: '24 марта',
+                    weekday: 'вторник',
+                    city: 'Кумамото',
+                    intensity: 'light',
+                    activities: [
+                        'Переезд Беппу → Кумамото',
+                        'Заселение в отель',
+                        'Прогулка по городу'
+                    ],
+                    notes: 'Переезд в новую базу - Кумамото'
+                },
+                {
+                    number: 13,
+                    date: '25 марта',
+                    weekday: 'среда',
+                    city: 'Кумамото / Асо',
+                    intensity: 'hard',
+                    activities: [
+                        'Поездка на вулкан Асо',
+                        'Кальдера',
+                        'Смотровые площадки',
+                        'Кратер (если открыт)',
+                        'Возвращение в Кумамото'
+                    ],
+                    notes: 'Самый "вау-природный" день!'
+                },
+                {
+                    number: 14,
+                    date: '26 марта',
+                    weekday: 'четверг',
+                    city: 'Юг Кюсю',
+                    intensity: 'hard',
+                    activities: [
+                        'Поездка на юг острова Кюсю',
+                        'Вулкан (название уточняется)',
+                        'Природные достопримечательности'
+                    ],
+                    notes: 'Исследуем южную часть Кюсю'
+                },
+                {
+                    number: 15,
+                    date: '27 марта',
+                    weekday: 'пятница',
+                    city: 'Осака',
+                    intensity: 'medium',
+                    activities: [
+                        'Переезд Кумамото → Осака (на поездах)',
+                        'Заселение в отель',
+                        'Прогулка по городу',
+                        'Последние покупки'
+                    ],
+                    notes: 'Возвращение в Осаку перед вылетом'
+                },
+                {
+                    number: 16,
+                    date: '28 марта',
+                    weekday: 'суббота',
+                    city: 'Пекин',
+                    intensity: 'light',
+                    activities: [
+                        'Выезд из отеля до 11:00',
+                        '✈️ Вылет Осака → Пекин',
+                        'Вылет: 14:35 (KIX)',
+                        'Прилет: 17:30 (PEK)',
+                        'В пути: 3ч 55м',
+                        'Трансфер в отель в Пекине',
+                        'Заселение, ночь в Пекине'
+                    ],
+                    notes: 'День вылета из Японии. Последняя ночь в Пекине перед домой.'
+                },
+                {
+                    number: 17,
+                    date: '29 марта',
+                    weekday: 'воскресенье',
+                    city: 'Домой',
+                    intensity: 'light',
+                    activities: [
+                        '✈️ Вылет из Пекина домой',
+                        'Таня → Москва:',
+                        '  Вылет 11:40 (PKX) → Прилет 14:55 (SVO)',
+                        '  Air China, 8ч 15м',
+                        'Катя → Мадрид (через Абу-Даби):',
+                        '  Вылет 19:50 (PKX) → 00:40 (AUH)',
+                        '  Затем 14:05 (AUH) → 19:40 (MAD)',
+                        '  Etihad Airways'
+                    ],
+                    notes: 'Возвращение домой. Таня летит утром, Катя вечером.'
+                }
+            ],
+            accommodation: [
+                { 
+                    city: 'Киото', 
+                    hotel: 'Tokyu Stay Kyoto Sanjo-Karasuma', 
+                    address: 'Nakagyo-ku Kakimotocho 392, Nakagyo Ward, Kyoto, 604-8173',
+                    dates: '16-20 марта',
+                    checkIn: '15:00-00:00',
+                    checkOut: '11:00',
+                    breakfast: 'Нет',
+                    cost: '€505',
+                    bookingNumber: '6436.677.953',
+                    link: 'https://www.booking.com/hotel/jp/tokyu-stay-kyoto-ryogaemachi-dori.html',
+                    phone: '+81 75 221 0109'
+                },
+                { 
+                    city: 'Хиросима', 
+                    hotel: 'Oriental Hotel Hiroshima', 
+                    address: '6-10 Tanaka-machi, Naka-ku, Hiroshima-shi, Hiroshima Prefecture',
+                    dates: '20-22 марта',
+                    checkIn: '24:00 (пятница)',
+                    checkOut: 'воскресенье',
+                    breakfast: 'Нет',
+                    cost: '¥43,918 (купон −¥3,819)',
+                    bookingNumber: '6188178191',
+                    link: 'https://www.booking.com',
+                    phone: '082-240-7111',
+                    note: 'Оплата при заселении. Standard Plus Double Room.'
+                },
+                { 
+                    city: 'Беппу', 
+                    hotel: 'Amanek Beppu Yula-Re', 
+                    address: 'Ekimae Honmachi 6-35, Beppu, 874-0934',
+                    dates: '22-24 марта',
+                    checkIn: '15:00-00:00',
+                    checkOut: '11:00',
+                    breakfast: 'Нет',
+                    cost: '€193 (¥34,938)',
+                    bookingNumber: '5238.571.378',
+                    link: 'https://www.booking.com/hotel/jp/amanekubie-fu-yurari.html',
+                    phone: '+81 977 76 5566'
+                },
+                { 
+                    city: 'Кумамото', 
+                    hotel: 'Daiwa Roynet Hotel Kumamoto Ginzadori Premier', 
+                    address: 'Chuo-ku Shimotoori 1-9-1, Kumamoto, 860-0807',
+                    dates: '24-27 марта',
+                    checkIn: '14:00-23:30',
+                    checkOut: '11:00',
+                    breakfast: 'Нет',
+                    cost: '€216 (¥39,172)',
+                    bookingNumber: '6191.770.746',
+                    link: 'https://www.booking.com/hotel/jp/daiwa-roynet-kumamoto-ginzadori.html',
+                    // TODO: уточнить ссылку на Booking.com
+                    phone: '+81 96 312 0655'
+                },
+                { 
+                    city: 'Осака', 
+                    hotel: 'Henn na Hotel Osaka Namba', 
+                    address: 'Chuo-ku Nishishinsaibashi 2-10-16, Chuo Ward, Osaka, 542-0086',
+                    dates: '27-28 марта',
+                    checkIn: '15:00',
+                    checkOut: '11:00',
+                    breakfast: 'Нет',
+                    cost: '€94 (¥17,119)',
+                    bookingNumber: '5003.893.835',
+                    link: 'https://www.booking.com/hotel/jp/henn-na-hotel-osaka-shinsaibashi.html',
+                    phone: '+81 50 5576 8355'
+                }
+            ]
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTimeline();
+            renderRouteMap();
+            renderDays();
+            renderAccommodation();
+        });
+
+        // Render Timeline as Calendar
+        function renderTimeline() {
+            const container = document.getElementById('timelineContainer');
+            
+            // Week structure: Mon, Tue, Wed, Thu, Fri, Sat, Sun
+            const weekDays = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+            
+            // First week: empty Mon, Tue, Wed, then Thu (Day 0 - 12 Mar), Fri, Sat, Sun
+            const weeks = [];
+            let currentWeek = [];
+            
+            // Add 3 empty days (Mon, Tue, Wed) before Day 0 (Thursday 12 Mar)
+            for (let i = 0; i < 3; i++) {
+                currentWeek.push(null);
+            }
+            
+            tripData.days.forEach((day, index) => {
+                currentWeek.push(day);
+                
+                // End of week is Sunday (7 days total)
+                if (currentWeek.length === 7) {
+                    weeks.push([...currentWeek]);
+                    currentWeek = [];
+                }
+            });
+            
+            // Add remaining days if any
+            if (currentWeek.length > 0) {
+                // Fill rest of week with empty slots
+                while (currentWeek.length < 7) {
+                    currentWeek.push(null);
+                }
+                weeks.push(currentWeek);
+            }
+            
+            container.innerHTML = weeks.map((week, weekIndex) => {
+                const weekHtml = week.map(day => {
+                    if (!day) {
+                        return '<div class="calendar-day empty"></div>';
+                    }
+                    return `
+                        <div class="calendar-day" onclick="scrollToDay(${day.number})">
+                            <div class="weekday">${day.weekday.slice(0, 2)}</div>
+                            <div class="day-number">День ${day.number}</div>
+                            <div class="day-date">${day.date.split(' ')[0]} мар</div>
+                            <div class="day-city">${day.city}</div>
+                            <div class="intensity ${day.intensity}">
+                                ${day.intensity === 'light' ? 'Лайт' : day.intensity === 'medium' ? 'Миди' : 'Хард'}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+                
+                return `<div class="calendar-week">${weekHtml}</div>`;
+            }).join('');
+        }
+
+        // Render Route Map with Leaflet
+        function renderRouteMap() {
+            const routeStops = [
+                { city: 'Осака', lat: 34.6937, lng: 135.5023, dates: '16 марта (прилет)', days: '4', icon: '✈️', desc: 'Прилет в аэропорт Кансай' },
+                { city: 'Киото', lat: 35.0116, lng: 135.7681, dates: '16-20 марта', days: '4-8', icon: '⛩️', desc: 'Храмы, сады, Universal Studios' },
+                { city: 'Хиросима', lat: 34.3853, lng: 132.4553, dates: '20-22 марта', days: '8-10', icon: '🕊️', desc: 'Мемориал мира, Миядзима' },
+                { city: 'Беппу', lat: 33.2845, lng: 131.4912, dates: '22-24 марта', days: '10-11', icon: '♨️', desc: 'Онсены и релакс' },
+                { city: 'Кумамото', lat: 32.8031, lng: 130.7079, dates: '24-27 марта', days: '12-14', icon: '🏯', desc: 'Замок, вулкан Асо, юг Кюсю' },
+                { city: 'Осака', lat: 34.6937, lng: 135.5023, dates: '27-28 марта (вылет)', days: '15-16', icon: '✈️', desc: 'Вылет домой' }
+            ];
+
+            // Initialize map centered on Japan
+            const map = L.map('map').setView([35.0, 135.0], 6);
+
+            // Add tile layer (English version - CartoDB)
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+                attribution: '© OpenStreetMap contributors © CARTO',
+                maxZoom: 19,
+                subdomains: 'abcd'
+            }).addTo(map);
+
+            // Create custom icon
+            const customIcon = L.divIcon({
+                className: 'custom-marker',
+                html: '<div style="background: linear-gradient(135deg, #FFB7C5 0%, #FF6B9D 100%); width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; box-shadow: 0 3px 10px rgba(255, 107, 157, 0.4); border: 3px solid white;">📍</div>',
+                iconSize: [30, 30],
+                iconAnchor: [15, 15]
+            });
+
+            // Add markers and connect with lines
+            const latLngs = [];
+            routeStops.forEach((stop, index) => {
+                const marker = L.marker([stop.lat, stop.lng], { icon: customIcon }).addTo(map);
+                
+                marker.bindPopup(`
+                    <div class="popup-icon">${stop.icon}</div>
+                    <div class="popup-title">${stop.city}</div>
+                    <div class="popup-dates">${stop.dates}</div>
+                    <div class="popup-dates">День ${stop.days}</div>
+                    <div style="margin-top: 8px; font-size: 0.85em; color: #666;">${stop.desc}</div>
+                `);
+
+                latLngs.push([stop.lat, stop.lng]);
+            });
+
+            // Draw route line
+            L.polyline(latLngs, {
+                color: '#FF6B9D',
+                weight: 3,
+                opacity: 0.7,
+                dashArray: '10, 10'
+            }).addTo(map);
+        }
+
+        // Render Days
+        function renderDays() {
+            const container = document.getElementById('daysContainer');
+            container.innerHTML = tripData.days.map(day => `
+                <div class="day-card" id="day${day.number}">
+                    <div class="day-card-header">
+                        <div class="day-card-title">День ${day.number}: ${day.city}</div>
+                        <div class="day-card-date">${day.date}, ${day.weekday}</div>
+                    </div>
+                    <div class="day-card-content">
+                        <h3>План дня:</h3>
+                        <ul>
+                            ${day.activities.map(activity => `<li>${activity}</li>`).join('')}
+                        </ul>
+                        ${day.notes ? `<div class="note">💡 ${day.notes}</div>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Render Accommodation
+        function renderAccommodation() {
+            const tbody = document.getElementById('accommodationTable');
+            tbody.innerHTML = tripData.accommodation.map((item, index) => `
+                <tr${item.note ? ' style="background: #FFF3CD;"' : ''}>
+                    <td>${item.city}</td>
+                    <td>
+                        ${item.link ? `<a href="${item.link}" target="_blank">${item.hotel}</a>` : item.hotel}
+                        ${item.note ? `<br><small style="color: #856404;">${item.note}</small>` : ''}
+                    </td>
+                    <td style="font-size: 0.85em;">${item.address}</td>
+                    <td>${item.dates}</td>
+                    <td style="font-size: 0.85em;">${item.checkIn} / ${item.checkOut}</td>
+                    <td>${item.breakfast}</td>
+                    <td>${item.cost}</td>
+                    <td style="font-size: 0.85em;">${item.bookingNumber || '-'}</td>
+                    <td style="text-align: center;">
+                        <input type="checkbox" onchange="saveAccommodation(${index}, this.checked)" 
+                               ${getAccommodationStatus(index) ? 'checked' : ''}>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+
+
+        // Save/Load Functions
+        function saveAccommodation(index, checked) {
+            const saved = JSON.parse(localStorage.getItem('japanAccommodation') || '{}');
+            saved[index] = checked;
+            localStorage.setItem('japanAccommodation', JSON.stringify(saved));
+        }
+
+        function getAccommodationStatus(index) {
+            const saved = JSON.parse(localStorage.getItem('japanAccommodation') || '{}');
+            return saved[index] || false;
+        }
+
+
+
+        // Navigation Functions
+        function scrollToSection(sectionId) {
+            document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function scrollToDay(dayNumber) {
+            document.getElementById('day' + dayNumber).scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</body>
+</html>
