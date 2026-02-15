@@ -118,12 +118,15 @@
             flex-direction: column;
             gap: 20px;
             padding: 20px 0;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         .calendar-week {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
             gap: 10px;
+            min-width: 320px;
         }
 
         .calendar-day {
@@ -173,9 +176,9 @@
         }
 
         .calendar-day .day-number {
-            font-size: 1.3em;
+            font-size: 1em;
             font-weight: 600;
-            margin-bottom: 5px;
+            margin-bottom: 3px;
         }
 
         .calendar-day .day-date {
@@ -349,68 +352,124 @@
             gap: 30px;
         }
 
-        /* Responsive */
+        /* Responsive - Tablets */
         @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .header {
+                padding: 25px 15px;
+                margin-bottom: 25px;
+                border-radius: 20px;
+            }
+
             .header h1 {
-                font-size: 2em;
+                font-size: 1.8em;
             }
 
             .header .dates {
-                font-size: 1.1em;
+                font-size: 1em;
             }
 
             .header .route {
-                font-size: 0.9em;
+                font-size: 0.85em;
             }
 
             .nav {
-                gap: 8px;
+                gap: 6px;
                 padding: 10px;
+                flex-wrap: wrap;
             }
 
             .nav-btn {
                 padding: 8px 12px;
-                font-size: 0.85em;
-            }
-
-            .calendar-week {
-                grid-template-columns: repeat(7, 1fr);
-                gap: 5px;
-            }
-
-            .calendar-day {
-                padding: 8px 4px;
-                min-height: 80px;
                 font-size: 0.8em;
             }
 
+            /* Calendar: switch to scrollable horizontal on mobile */
+            .calendar-week {
+                grid-template-columns: repeat(7, minmax(60px, 1fr));
+                gap: 4px;
+            }
+
+            .calendar-day {
+                padding: 4px 2px;
+                min-height: 55px;
+                font-size: 0.65em;
+                border-radius: 6px;
+            }
+
+            .calendar-day .weekday {
+                font-size: 0.65em;
+                margin-bottom: 2px;
+            }
+
             .calendar-day .day-number {
-                font-size: 1.1em;
+                font-size: 0.7em;
+                margin-bottom: 1px;
+            }
+
+            .calendar-day .day-date {
+                font-size: 0.6em;
+                margin-bottom: 4px;
             }
 
             .calendar-day .day-city {
-                font-size: 0.75em;
+                font-size: 0.65em;
             }
 
             .calendar-day .intensity {
-                font-size: 0.65em;
-                padding: 2px 5px;
+                font-size: 0.55em;
+                padding: 2px 4px;
+                margin-top: 4px;
             }
 
             .day-card {
-                padding: 15px 20px;
+                padding: 15px;
             }
 
             .info-card {
-                padding: 20px;
+                padding: 15px;
+                border-radius: 15px;
             }
 
-            table {
-                font-size: 12px;
+            /* Hotel table: convert to card layout on mobile */
+            table, thead, tbody, th, td, tr {
+                display: block;
             }
 
-            table th, table td {
-                padding: 8px 5px;
+            thead tr {
+                display: none;
+            }
+
+            tbody tr {
+                margin-bottom: 15px;
+                border: 1px solid #FFE8E8;
+                border-radius: 12px;
+                padding: 15px;
+                background: white;
+            }
+
+            tbody td {
+                padding: 5px 0;
+                text-align: left !important;
+                font-size: 14px;
+                border: none;
+            }
+
+            tbody td:before {
+                content: attr(data-label);
+                font-weight: 600;
+                color: #FF6B9D;
+                display: block;
+                font-size: 0.8em;
+                margin-bottom: 2px;
+            }
+
+            .grid-2 {
+                grid-template-columns: 1fr;
+                gap: 15px;
             }
 
             .map-city {
@@ -433,6 +492,77 @@
 
             .grid-2 {
                 grid-template-columns: 1fr;
+            }
+        }
+
+        /* Very small screens (phones) */
+        @media (max-width: 420px) {
+            body {
+                padding: 6px;
+            }
+
+            .header {
+                padding: 20px 12px;
+                border-radius: 15px;
+            }
+
+            .header h1 {
+                font-size: 1.4em;
+            }
+
+            .header .dates {
+                font-size: 0.9em;
+            }
+
+            .calendar-week {
+                grid-template-columns: repeat(7, 1fr);
+                gap: 2px;
+            }
+
+            .calendar-day {
+                padding: 4px 2px;
+                min-height: 60px;
+                font-size: 0.6em;
+                border-radius: 6px;
+            }
+
+            .calendar-day .weekday {
+                font-size: 0.6em;
+                margin-bottom: 1px;
+            }
+
+            .calendar-day .day-number {
+                font-size: 0.6em;
+                margin-bottom: 1px;
+            }
+
+            .calendar-day .day-date {
+                display: none;
+            }
+
+            .calendar-day .intensity {
+                font-size: 0.5em;
+                padding: 1px 3px;
+                margin-top: 2px;
+            }
+
+            .nav {
+                gap: 4px;
+                padding: 8px;
+            }
+
+            .nav-btn {
+                padding: 6px 10px;
+                font-size: 0.75em;
+            }
+
+            .info-card {
+                padding: 12px;
+                margin-bottom: 15px;
+            }
+
+            #map {
+                height: 300px;
             }
         }
 
@@ -554,7 +684,6 @@
                             <th>Check-in / Check-out</th>
                             <th>Завтрак</th>
                             <th>Стоимость</th>
-                            <th>№ брони</th>
                             <th>✓</th>
                         </tr>
                     </thead>
@@ -1116,18 +1245,17 @@
             const tbody = document.getElementById('accommodationTable');
             tbody.innerHTML = tripData.accommodation.map((item, index) => `
                 <tr${item.note ? ' style="background: #FFF3CD;"' : ''}>
-                    <td>${item.city}</td>
-                    <td>
+                    <td data-label="Город">${item.city}</td>
+                    <td data-label="Отель">
                         ${item.link ? `<a href="${item.link}" target="_blank">${item.hotel}</a>` : item.hotel}
                         ${item.note ? `<br><small style="color: #856404;">${item.note}</small>` : ''}
                     </td>
-                    <td style="font-size: 0.85em;">${item.address}</td>
-                    <td>${item.dates}</td>
-                    <td style="font-size: 0.85em;">${item.checkIn} / ${item.checkOut}</td>
-                    <td>${item.breakfast}</td>
-                    <td>${item.cost}</td>
-                    <td style="font-size: 0.85em;">${item.bookingNumber || '-'}</td>
-                    <td style="text-align: center;">
+                    <td data-label="Адрес" style="font-size: 0.85em;">${item.address}</td>
+                    <td data-label="Даты">${item.dates}</td>
+                    <td data-label="Check-in / Check-out" style="font-size: 0.85em;">${item.checkIn} / ${item.checkOut}</td>
+                    <td data-label="Завтрак">${item.breakfast}</td>
+                    <td data-label="Стоимость">${item.cost}</td>
+                    <td data-label="Забронировано" style="text-align: center;">
                         <input type="checkbox" onchange="saveAccommodation(${index}, this.checked)" 
                                ${getAccommodationStatus(index) ? 'checked' : ''}>
                     </td>
