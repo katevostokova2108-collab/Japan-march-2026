@@ -25,6 +25,60 @@
             margin: 0 auto;
         }
 
+        /* Hotel photo thumbnail */
+        .hotel-thumb {
+            width: 48px;
+            height: 36px;
+            object-fit: cover;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: 2px solid #FFB7C5;
+            display: block;
+            margin-top: 5px;
+        }
+        .hotel-thumb:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(255,107,157,0.35);
+        }
+
+        /* Lightbox */
+        .lightbox-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.82);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            cursor: zoom-out;
+        }
+        .lightbox-overlay.active {
+            display: flex;
+        }
+        .lightbox-overlay img {
+            max-width: 90vw;
+            max-height: 85vh;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+            animation: lightboxIn 0.25s ease;
+        }
+        @keyframes lightboxIn {
+            from { opacity: 0; transform: scale(0.88); }
+            to   { opacity: 1; transform: scale(1); }
+        }
+        .lightbox-close {
+            position: fixed;
+            top: 20px;
+            right: 28px;
+            font-size: 2.2em;
+            color: white;
+            cursor: pointer;
+            line-height: 1;
+            opacity: 0.8;
+        }
+        .lightbox-close:hover { opacity: 1; }
+
         /* Header */
         .header {
             text-align: center;
@@ -616,6 +670,140 @@
             margin-top: 20px;
         }
 
+        /* Info Grid */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .info-grid-card {
+            background: linear-gradient(135deg, #FFF8F0 0%, #FFE8E8 100%);
+            border-radius: 16px;
+            padding: 24px 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            border: 2px solid transparent;
+            position: relative;
+        }
+
+        .info-grid-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(255, 107, 157, 0.25);
+            border-color: #FFB7C5;
+        }
+
+        .info-grid-card.open {
+            border-color: #FF6B9D;
+            background: white;
+        }
+
+        .info-grid-card .card-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .info-grid-card .card-title {
+            font-size: 1.05em;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .info-grid-detail {
+            display: none;
+            grid-column: 1 / -1;
+            background: white;
+            border-radius: 16px;
+            padding: 25px 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            border-left: 4px solid #FF6B9D;
+            text-align: left;
+            line-height: 1.7;
+            font-size: 0.95em;
+        }
+
+        .info-grid-detail.open {
+            display: block;
+        }
+
+        .info-grid-detail h4 {
+            color: #FF6B9D;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .info-grid-detail ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .info-grid-detail li {
+            padding: 4px 0 4px 20px;
+            position: relative;
+        }
+
+        .info-grid-detail li:before {
+            content: '🌸';
+            position: absolute;
+            left: 0;
+        }
+
+        .info-grid-detail a {
+            color: #FF6B9D;
+            font-weight: 500;
+        }
+
+        .info-grid-detail .price-table {
+            width: 100%;
+            margin: 12px 0;
+            border-collapse: collapse;
+        }
+
+        .info-grid-detail .price-table td,
+        .info-grid-detail .price-table th {
+            padding: 8px 12px;
+            border-bottom: 1px solid #f0f0f0;
+            text-align: left;
+            font-size: 0.95em;
+        }
+
+        .info-grid-detail .price-table th {
+            background: #FFF8F0;
+            color: #FF6B9D;
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            .info-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+
+            .info-grid-card {
+                padding: 18px 12px;
+            }
+
+            .info-grid-card .card-icon {
+                font-size: 1.5em;
+            }
+
+            .info-grid-detail {
+                padding: 18px;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .info-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+
+            .info-grid-card {
+                padding: 14px 10px;
+            }
+        }
+
         /* Smooth Scroll */
         html {
             scroll-behavior: smooth;
@@ -628,6 +816,12 @@
     </style>
 </head>
 <body>
+    <!-- Lightbox -->
+    <div class="lightbox-overlay" id="lightboxOverlay" onclick="closeLightbox()">
+        <span class="lightbox-close" onclick="closeLightbox()">✕</span>
+        <img id="lightboxImg" src="" alt="Фото номера">
+    </div>
+
     <div class="container">
         <!-- Header -->
         <div class="header">
@@ -642,9 +836,9 @@
         <div class="nav">
             <button class="nav-btn" onclick="scrollToSection('timeline')">Таймлайн</button>
             <button class="nav-btn" onclick="scrollToSection('map-section')">Карта</button>
+            <button class="nav-btn" onclick="scrollToSection('tori-map')">Тори Чан</button>
             <button class="nav-btn" onclick="scrollToSection('days')">Маршрут</button>
             <button class="nav-btn" onclick="scrollToSection('accommodation')">Жильё</button>
-            <button class="nav-btn" onclick="scrollToSection('transport')">Транспорт</button>
             <button class="nav-btn" onclick="scrollToSection('useful')">Полезное</button>
         </div>
 
@@ -660,6 +854,15 @@
         <section id="map-section" class="info-card">
             <h2 class="info-card-title">🗺️ Карта маршрута по Японии</h2>
             <div id="map"></div>
+        </section>
+
+        <!-- Tori Chan Map -->
+        <section id="tori-map" class="info-card">
+            <h2 class="info-card-title">📍 Карта мест от Тори Чан</h2>
+            <iframe src="https://www.google.com/maps/d/u/1/embed?mid=1FKQhYymtEdrRUbPJB3yXV7LR0m2WEQc&ll=34.994856,135.785046&z=8" width="100%" height="500" style="border: none; border-radius: 15px; box-shadow: 0 5px 20px rgba(255, 107, 157, 0.2);"></iframe>
+            <p style="text-align: center; margin-top: 12px; font-size: 0.85em; color: #888;">
+                <a href="https://www.google.com/maps/d/u/1/viewer?mid=1FKQhYymtEdrRUbPJB3yXV7LR0m2WEQc&ll=34.994856,135.785046&z=10" target="_blank" style="color: #FF6B9D;">Открыть карту в полном размере ↗</a>
+            </p>
         </section>
 
         <!-- Days Section -->
@@ -694,71 +897,256 @@
             </div>
         </section>
 
-        <!-- Transport Section -->
-        <section id="transport" class="info-card">
-            <h2 class="info-card-title">🚄 Транспорт в Японии</h2>
-            
-            <div class="grid-2">
-                <div>
-                    <h3 style="color: #FF6B9D; margin-bottom: 15px;">JR Pass</h3>
-                    <div class="note">
-                        <strong>Нужен!</strong> Выбрать между 7 или 14 дней (сравнить стоимость с маршрутом)
-                    </div>
-                    
-                    <h3 style="color: #FF6B9D; margin-top: 25px; margin-bottom: 15px;">Suica / Pasmo</h3>
-                    <div class="note">
-                        Да, обязательно! Для метро и местного транспорта
-                    </div>
-                </div>
-
-                <div>
-                    <h3 style="color: #FF6B9D; margin-bottom: 15px;">Основные маршруты</h3>
-                    <ul>
-                        <li>Аэропорт KIX → Киото (Nankai / JR)</li>
-                        <li>Киото → Окаяма (синкансэн)</li>
-                        <li>Окаяма → Курасики (местный поезд)</li>
-                        <li>Курасики → Хиросима (синкансэн)</li>
-                        <li>Хиросима → Миядзима (паром)</li>
-                        <li>Хиросима → Беппу (синкансэн + limited express)</li>
-                        <li>Беппу → Кумамото (поезд)</li>
-                        <li>Кумамото → вулкан Асо (автобус/поезд)</li>
-                        <li>Кумамото → Осака (синкансэн)</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-
-
         <!-- Useful Info Section -->
         <section id="useful" class="info-card">
-            <h2 class="info-card-title">📱 Полезная информация</h2>
+            <h2 class="info-card-title">📋 Полезное</h2>
             
-            <div class="grid-2">
-                <div>
-                    <h3 style="color: #FF6B9D; margin-bottom: 15px;">Приложения</h3>
+            <div class="info-grid" id="infoGrid">
+                <div class="info-grid-card" onclick="toggleInfoCard('jr')">
+                    <div class="card-icon">🚄</div>
+                    <div class="card-title">JR Pass</div>
+                </div>
+                <div class="info-grid-card" onclick="toggleInfoCard('luggage')">
+                    <div class="card-icon">🧳</div>
+                    <div class="card-title">Чемоданы</div>
+                </div>
+                <div class="info-grid-card" onclick="toggleInfoCard('currency')">
+                    <div class="card-icon">💴</div>
+                    <div class="card-title">Обмен валюты</div>
+                </div>
+                <div class="info-grid-card" onclick="toggleInfoCard('transport')">
+                    <div class="card-icon">🚇</div>
+                    <div class="card-title">Транспорт</div>
+                </div>
+                <div class="info-grid-card" onclick="toggleInfoCard('apps')">
+                    <div class="card-icon">📱</div>
+                    <div class="card-title">Приложения</div>
+                </div>
+                <div class="info-grid-card" onclick="toggleInfoCard('sos')">
+                    <div class="card-icon">🆘</div>
+                    <div class="card-title">SOS</div>
+                </div>
+                <div class="info-grid-card" onclick="toggleInfoCard('meds')">
+                    <div class="card-icon">💊</div>
+                    <div class="card-title">Аптечка</div>
+                </div>
+                <div class="info-grid-card" onclick="toggleInfoCard('internet')">
+                    <div class="card-icon">📶</div>
+                    <div class="card-title">Интернет</div>
+                </div>
+                <div class="info-grid-card" onclick="toggleInfoCard('dictionary')">
+                    <div class="card-icon">🗣️</div>
+                    <div class="card-title">Японский</div>
+                </div>
+
+                <div class="info-grid-detail" id="detail-jr">
+                    <h4>Скоростные поезда и пассы</h4>
+
+                    <p style="margin-bottom: 14px;">🎫 <strong>Забронировать билеты онлайн:</strong> <a href="https://japantravel.navitime.com/en/booking/jr/" target="_blank">japantravel.navitime.com</a><br>
+                    <span style="font-size: 0.85em; color: #888;">Также можно купить билет в тот же день на станции в окошке <strong>Midori no Madoguchi</strong> (みどりの窓口) или в автомате.</span></p>
+
+                    <h4 style="margin-top: 18px;">JR West Rail Pass <span style="font-size: 0.8em; color: #888;">(Киото → Осака → Хиросима)</span></h4>
+                    <p>Для «нижнего пути» — покрывает синкансэны между Киото, Осакой, Окаямой и Хиросимой.</p>
+                    <p style="margin-top: 8px;">🔗 <a href="https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/" target="_blank">JR West Rail Pass (официальный сайт)</a></p>
+
+                    <h4 style="margin-top: 18px;">JR Kyushu Rail Pass <span style="font-size: 0.8em; color: #888;">(Беппу → Кумамото → юг)</span></h4>
+                    <table class="price-table">
+                        <tr><th>Тип</th><th>Дни</th><th>Цена (взрослый)</th></tr>
+                        <tr><td>All Kyushu Pass</td><td>3 дня</td><td>¥16,000 (~€100)</td></tr>
+                        <tr><td>All Kyushu Pass</td><td>5 дней</td><td>¥18,000 (~€112)</td></tr>
+                        <tr><td>Northern Kyushu Pass</td><td>3 дня</td><td>¥11,000 (~€69)</td></tr>
+                        <tr><td>Northern Kyushu Pass</td><td>5 дней</td><td>¥13,000 (~€81)</td></tr>
+                    </table>
+                    <p style="margin-top: 8px;">🔗 <a href="https://www.jrkyushu.co.jp/english/railpass/index.html" target="_blank">JR Kyushu Rail Pass (официальный сайт)</a></p>
+
+                    <p style="font-size: 0.85em; color: #888; margin-top: 12px;">* Цены ориентировочные, уточняйте перед покупкой.</p>
+                </div>
+
+                <div class="info-grid-detail" id="detail-luggage">
+                    <h4>Доставка чемоданов между отелями</h4>
+                    <p>В Японии есть сервис <strong>Takkyubin</strong> (宅急便) от Yamato Transport — можно отправить чемоданы из одного отеля в другой, и они приедут на следующий день.</p>
                     <ul>
-                        <li>Google Maps</li>
-                        <li>Google Translate (офлайн)</li>
-                        <li>Japan Travel</li>
-                        <li>Hyperdia / Navitime</li>
+                        <li>Стоимость: ~¥2,000–3,000 за чемодан (~€13–19)</li>
+                        <li>Срок: обычно на следующий день к вечеру</li>
+                        <li>Как: попросить на ресепшене отеля, заполнить форму</li>
+                        <li>Работает по всей Японии</li>
+                    </ul>
+                    <p style="margin-top: 12px;">🔗 <a href="https://www.kuronekoyamato.co.jp/en/" target="_blank">Yamato Transport (Kuroneko)</a></p>
+                    <p style="font-size: 0.85em; color: #888; margin-top: 8px;">Идеально для переездов с несколькими пересадками — путешествуйте налегке!</p>
+                </div>
+
+                <div class="info-grid-detail" id="detail-currency">
+                    <h4>Обмен валюты в Японии</h4>
+                    <ul>
+                        <li><strong>Аэропорт:</strong> Обменники в KIX (Кансай) — удобно при прилёте, курс приемлемый</li>
+                        <li><strong>7-Eleven / Lawson / Family Mart:</strong> Банкоматы принимают иностранные карты (Visa/Mastercard)</li>
+                        <li><strong>Почта (Japan Post):</strong> Банкоматы в отделениях — хороший курс, без комиссии</li>
+                        <li><strong>Наличные важны:</strong> Многие маленькие заведения, храмы и онсены принимают только кэш</li>
+                        <li><strong>Рекомендация:</strong> Иметь при себе ¥30,000–50,000 наличными на человека</li>
                     </ul>
                 </div>
 
-                <div>
-                    <h3 style="color: #FF6B9D; margin-bottom: 15px;">Заметки и идеи</h3>
+                <div class="info-grid-detail" id="detail-transport">
+                    <h4>Suica / IC-карта</h4>
+                    <p>Виртуальная карта, которой можно оплачивать проезд в транспорте, такси, счета в кафе и магазинах (где не принимают кредитки).</p>
                     <ul>
-                        <li>Проверить прогноз сакуры за 7–10 дней</li>
-                        <li>Забронировать кимоно заранее</li>
-                        <li>Проверить правила онсенов (тату)</li>
-                        <li>Изучить этикет в храмах</li>
+                        <li><strong>Вариант 1 — Apple Pay:</strong> Привязать Suica к Apple Pay или кредитной карте (удобнее всего)</li>
+                        <li><strong>Вариант 2 — физическая карта:</strong> Купить Suica / Pasmo (это одно и то же) в автомате на станции. Пополнять наличкой в автоматах или магазинах 7-Eleven, Family Mart, Lawson</li>
+                    </ul>
+
+                    <h4 style="margin-top: 18px;">Метро и автобусы</h4>
+                    <ul>
+                        <li><strong>Метро:</strong> Разовый билет ¥170–320 (~€1–2), но с IC-картой удобнее</li>
+                        <li><strong>Автобусы:</strong> Оплата при выходе, точная сумма (или IC-карта)</li>
+                    </ul>
+
+                    <h4 style="margin-top: 18px;">Такси</h4>
+                    <ul>
+                        <li>Безопасно, чисто, но дорого. Старт ~¥500–700 (~€3–4). Двери открываются автоматически!</li>
+                        <li><strong>Приложения для вызова:</strong> DiDi, Taxi Go, Uber</li>
                     </ul>
                 </div>
-            </div>
 
-            <h3 style="color: #FF6B9D; margin-top: 30px; margin-bottom: 15px;">💴 Валюта и деньги</h3>
-            <div class="note">
-                <p><em>Информация будет добавлена позже</em></p>
+                <div class="info-grid-detail" id="detail-apps">
+                    <h4>Полезные приложения</h4>
+                    <ul>
+                        <li><strong>Suica</strong> — виртуальная карта для оплаты транспорта и покупок (через Apple Pay)</li>
+                        <li><strong><a href="https://tabelog.com/en/" target="_blank">Tabelog</a></strong> — найти и забронировать ресторан или кафе (японский аналог TripAdvisor для еды)</li>
+                        <li><strong>Google Maps</strong> — маршруты, расписание поездов, навигация</li>
+                        <li><strong>Google Translate</strong> — скачать японский для офлайн + камера для перевода меню/вывесок</li>
+                        <li><strong>Navitime</strong> — расписание поездов и автобусов</li>
+                        <li><strong>DiDi / Taxi Go / Uber</strong> — вызов такси</li>
+                    </ul>
+                </div>
+
+                <div class="info-grid-detail" id="detail-sos">
+                    <h4>Экстренные номера</h4>
+                    <table class="price-table">
+                        <tr><th>Служба</th><th>Номер</th><th>Японский</th></tr>
+                        <tr><td>Полиция</td><td><strong>110</strong></td><td>keisatsu 警察</td></tr>
+                        <tr><td>Скорая / Пожарные</td><td><strong>119</strong></td><td>kyukyushya 救急車 / shoubousya 消防車</td></tr>
+                        <tr><td>Japan Visitor Hotline</td><td><strong>050 3816 2787</strong></td><td>Поддержка для туристов (EN)</td></tr>
+                    </table>
+                </div>
+
+                <div class="info-grid-detail" id="detail-dictionary">
+                    <h4>Базовый японский разговорник</h4>
+
+                    <h4 style="margin-top: 16px;">Приветствия</h4>
+                    <table class="price-table">
+                        <tr><th>Русский</th><th>Как читать</th><th>How to read</th></tr>
+                        <tr><td>Привет / Добрый день</td><td>Коннитива</td><td>Konnichiwa</td></tr>
+                        <tr><td>Доброе утро</td><td>Охайо годзаймас</td><td>Ohayou gozaimasu</td></tr>
+                        <tr><td>Добрый вечер</td><td>Комбанва</td><td>Konbanwa</td></tr>
+                        <tr><td>До свидания</td><td>Саёнара</td><td>Sayounara</td></tr>
+                        <tr><td>Пока (неформально)</td><td>Джа нэ</td><td>Jaa ne</td></tr>
+                    </table>
+
+                    <h4 style="margin-top: 18px;">Вежливость</h4>
+                    <table class="price-table">
+                        <tr><th>Русский</th><th>Как читать</th><th>How to read</th></tr>
+                        <tr><td>Спасибо</td><td>Аригато годзаймас</td><td>Arigatou gozaimasu</td></tr>
+                        <tr><td>Не за что</td><td>До итасимаситэ</td><td>Dou itashimashite</td></tr>
+                        <tr><td>Извините / Простите</td><td>Сумимасэн</td><td>Sumimasen</td></tr>
+                        <tr><td>Прости (за ошибку)</td><td>Гомэн насай</td><td>Gomen nasai</td></tr>
+                        <tr><td>Можно?</td><td>Ии дэс ка</td><td>Ii desu ka</td></tr>
+                    </table>
+
+                    <h4 style="margin-top: 18px;">В ресторане</h4>
+                    <table class="price-table">
+                        <tr><th>Русский</th><th>Как читать</th><th>How to read</th></tr>
+                        <tr><td>Счёт, пожалуйста</td><td>Окайкэй во онэгайсимас</td><td>Okaikei wo onegaishimasu</td></tr>
+                        <tr><td>Вкусно!</td><td>Ойсий!</td><td>Oishii!</td></tr>
+                        <tr><td>Ещё одно, пожалуйста</td><td>Мо хитоцу онэгайсимас</td><td>Mou hitotsu onegaishimasu</td></tr>
+                        <tr><td>Я не ем мясо</td><td>Нику ва табэмасэн</td><td>Niku wa tabemasen</td></tr>
+                        <tr><td>Что посоветуете?</td><td>Осусумэ ва нан дэс ка</td><td>Osusume wa nan desu ka</td></tr>
+                    </table>
+
+                    <h4 style="margin-top: 18px;">В магазине и транспорте</h4>
+                    <table class="price-table">
+                        <tr><th>Русский</th><th>Как читать</th><th>How to read</th></tr>
+                        <tr><td>Сколько стоит?</td><td>Икура дэс ка</td><td>Ikura desu ka</td></tr>
+                        <tr><td>Где туалет?</td><td>Тоирэ ва доко дэс ка</td><td>Toire wa doko desu ka</td></tr>
+                        <tr><td>Где станция метро?</td><td>Тикатэцу но экй ва доко дэс ка</td><td>Chikatetsu no eki wa doko desu ka</td></tr>
+                        <tr><td>Помогите!</td><td>Тасукэтэ кудасай</td><td>Tasukete kudasai</td></tr>
+                        <tr><td>Я не понимаю</td><td>Вакаримасэн</td><td>Wakarimasen</td></tr>
+                        <tr><td>Вы говорите по-английски?</td><td>Эйго во ханасэмас ка</td><td>Eigo wo hanasemasu ka</td></tr>
+                    </table>
+
+                    <h4 style="margin-top: 18px;">Числа</h4>
+                    <table class="price-table">
+                        <tr><th>Цифра</th><th>Как читать</th><th>How to read</th></tr>
+                        <tr><td>1</td><td>Ити</td><td>Ichi</td></tr>
+                        <tr><td>2</td><td>Ни</td><td>Ni</td></tr>
+                        <tr><td>3</td><td>Сан</td><td>San</td></tr>
+                        <tr><td>4</td><td>Си / Ён</td><td>Shi / Yon</td></tr>
+                        <tr><td>5</td><td>Го</td><td>Go</td></tr>
+                        <tr><td>6</td><td>Року</td><td>Roku</td></tr>
+                        <tr><td>7</td><td>Нана</td><td>Nana</td></tr>
+                        <tr><td>8</td><td>Хати</td><td>Hachi</td></tr>
+                        <tr><td>9</td><td>Кю</td><td>Kyuu</td></tr>
+                        <tr><td>10</td><td>Дзю</td><td>Juu</td></tr>
+                    </table>
+                </div>
+
+                <div class="info-grid-detail" id="detail-internet">
+                    <h4>Интернет в Японии и Китае</h4>
+
+                    <p style="margin-bottom: 14px;">Лучший вариант — один eSIM на обе страны сразу. Не нужно покупать две отдельных карты.</p>
+
+                    <h4 style="margin-top: 4px;">⭐ Рекомендация: Airalo — план Asialink</h4>
+                    <p style="margin-bottom: 10px;">Региональный eSIM, покрывает 18 стран Азии — включая <strong>Японию и Китай</strong> одновременно. В Китае трафик идёт через международные серверы, поэтому <strong>Google, WhatsApp, Instagram, YouTube работают без VPN</strong>.</p>
+
+                    <table class="price-table">
+                        <tr><th>Данные</th><th>Срок</th><th>Цена</th></tr>
+                        <tr><td>3 ГБ</td><td>30 дней</td><td>~$13</td></tr>
+                        <tr><td>10 ГБ</td><td>30 дней</td><td>~$27</td></tr>
+                        <tr><td>20 ГБ</td><td>60 дней</td><td>~$45</td></tr>
+                    </table>
+
+                    <p style="margin-top: 12px;">🔗 <a href="https://www.airalo.com/asia-esim" target="_blank">Airalo — Asia eSIM (Asialink)</a></p>
+
+                    <h4 style="margin-top: 18px;">Как подключить</h4>
+                    <ul>
+                        <li>Скачать приложение <strong>Airalo</strong> → Asia → Asialink</li>
+                        <li>Купить план, получить QR-код</li>
+                        <li>Установить eSIM на телефон <strong>до отъезда</strong>, активировать по прилёту в Японию</li>
+                        <li>В Китае переключиться на тот же eSIM — всё уже настроено</li>
+                    </ul>
+
+                    <h4 style="margin-top: 18px;">⚠️ Китай — важно знать</h4>
+                    <ul>
+                        <li>Великий файрвол блокирует Google, WhatsApp, Instagram, Telegram для <em>местных</em> SIM</li>
+                        <li>Airalo Asialink обходит его автоматически — трафик идёт через зарубежные серверы</li>
+                        <li>На 100% не гарантировано (файрвол меняется), поэтому стоит <strong>установить VPN заранее</strong> — до въезда в Китай (потом не скачаешь)</li>
+                        <li>Хорошие VPN: ExpressVPN, NordVPN, Astrill</li>
+                    </ul>
+
+                    <h4 style="margin-top: 18px;">Требования к телефону</h4>
+                    <ul>
+                        <li>eSIM поддерживается на iPhone XR и новее</li>
+                        <li>Samsung Galaxy S20+, Google Pixel 4 и новее</li>
+                        <li>Если телефон не поддерживает eSIM — купить физическую туристическую SIM в аэропорту Кансай (KIX) по прилёту (~¥2,500 / 30 дней, только Япония)</li>
+                    </ul>
+
+                    <p style="font-size: 0.85em; color: #888; margin-top: 12px;">* Цены ориентировочные на момент составления гайда, уточняйте в приложении Airalo перед покупкой.</p>
+                </div>
+
+                <div class="info-grid-detail" id="detail-meds">
+                    <h4>Японские лекарства</h4>
+                    <p style="margin-bottom: 10px;">Продаются в аптеках (ドラッグストア) и магазинах типа Matsumoto Kiyoshi, Sundrug, Daikoku Drug.</p>
+                    <table class="price-table">
+                        <tr><th>Название</th><th>Японский</th><th>Для чего</th></tr>
+                        <tr><td>Seirogan</td><td>正露丸</td><td>Желудок (от отравления)</td></tr>
+                        <tr><td>Pablon</td><td>パブロン</td><td>Простуда и температура</td></tr>
+                        <tr><td>EVE</td><td>EVE</td><td>Ибупрофен (обезболивающее)</td></tr>
+                        <tr><td>Takeda Kanpo</td><td>タケダ漢方</td><td>Тяжесть в желудке, запор (травяной сбор)</td></tr>
+                        <tr><td>Anmertsu Yoko Yoko</td><td>アンメルツヨコヨコ</td><td>Растяжения, боли в мышцах и суставах</td></tr>
+                        <tr><td>Makiron S</td><td>マキロンS</td><td>Мазь от порезов</td></tr>
+                        <tr><td>Arerubi</td><td>アレルビ</td><td>Таблетки от аллергии</td></tr>
+                        <tr><td>Arejion</td><td>アレジオン</td><td>От аллергии (не вызывает сонливость)</td></tr>
+                    </table>
+                </div>
             </div>
         </section>
     </div>
@@ -774,10 +1162,8 @@
                     city: 'В пути',
                     intensity: 'light',
                     activities: [
-                        '✈️ Катя: вылет из Мадрида',
-                        'MAD 09:45 → AUH 19:20',
-                        'Ночная пересадка в Абу-Даби',
-                        'Ночь в аэропорту/отеле'
+                        '✈️ Катя: Мадрид → Абу-Даби: 09:45 (MAD) → 19:20 (AUH)',
+                        'Ночная пересадка в Абу-Даби (ночь в аэропорту/отеле)'
                     ],
                     notes: 'Катя начинает путешествие. Таня еще в Москве.'
                 },
@@ -788,11 +1174,10 @@
                     city: 'В пути',
                     intensity: 'light',
                     activities: [
-                        '✈️ Таня: вылет из Москвы (SVO) 21:05 → Пекин (PKX)',
-                        '✈️ Катя: вылет из Абу-Даби (AUH) 21:20 → Пекин (PKX)',
-                        'Обе в ночных рейсах, прилетают 14 марта утром'
+                        '✈️ Таня: Москва → Пекин: 21:05 (SVO) → 08:50+1 (PKX), Аэрофлот, 7ч 45м',
+                        '✈️ Катя: Абу-Даби → Пекин: 21:20 (AUH) → 08:45+1 (PKX), Etihad, 7ч 25м'
                     ],
-                    notes: 'Обе в полёте. Таня — прямой рейс Аэрофлот 7ч45м. Катя — Etihad 7ч25м.'
+                    notes: 'Обе в ночных рейсах, прилетают 14 марта утром.'
                 },
                 {
                     number: 2,
@@ -801,15 +1186,13 @@
                     city: 'Пекин',
                     intensity: 'light',
                     activities: [
-                        '✈️ Прилет утром:',
-                        'Катя прилетает в 08:45 (PKX)',
-                        'Таня прилетает в 09:50 (PKX)',
-                        'Встреча в аэропорту!',
-                        'Трансфер в отель (Airport Express → Dongzhimen ~25 мин)',
-                        'Гуляем по Пекину',
+                        '✈️ Прилёт: Катя 08:45, Таня 09:50 (PKX). Встреча в аэропорту!',
+                        '🚇 Трансфер в отель: Airport Express → станция Dongzhimen (~25 мин)',
+                        '🏨 Заселение в Jingshan Garden Hotel (чекин с 14:00, чемоданы можно оставить раньше)',
+                        '🏯 Запретный город (отель прямо рядом!)',
                         'Адаптируемся к часовому поясу'
                     ],
-                    notes: 'Легкий день адаптации после перелета. Катя прилетает на час раньше Тани.'
+                    notes: '🏨 НОЧУЕМ: Jingshan Garden Hotel, Пекин. Чемоданы не нужны — никуда не едем. Лёгкий день адаптации.'
                 },
                 {
                     number: 3,
@@ -818,11 +1201,11 @@
                     city: 'Пекин',
                     intensity: 'medium',
                     activities: [
-                        'Великая китайская стена (Mutianyu)',
-                        'Выезд утром',
-                        'Возвращение к вечеру'
+                        '🚌 Выезд на Великую китайскую стену (Mutianyu) — автобус или такси, ~1.5ч от центра',
+                        'Прогулка по стене, виды',
+                        '🚌 Возвращение в Пекин к вечеру'
                     ],
-                    notes: 'Главная достопримечательность Пекина'
+                    notes: '🏨 НОЧУЕМ: Jingshan Garden Hotel, Пекин. Чемоданы не нужны — возвращаемся в тот же отель. Завтра РАННИЙ подъём — собрать вещи с вечера!'
                 },
                 {
                     number: 4,
@@ -831,15 +1214,13 @@
                     city: 'Киото',
                     intensity: 'light',
                     activities: [
-                        '✈️ Ранний рейс Пекин → Осака',
-                        'Вылет: 08:45 (PEK)',
-                        'Прилет: 12:35 (KIX)',
-                        'В пути: 2ч 50м',
-                        'Трансфер в Киото (Nankai/JR ~1.5ч)',
-                        'Заселение в Tokyu Stay Kyoto (c 15:00)',
-                        'Вечерняя прогулка по району'
+                        '🧳 ВЫЕЗД ИЗ ОТЕЛЯ — чекаут до 12:00, едем в аэропорт с чемоданами',
+                        '✈️ Пекин → Осака: 08:45 (PEK) → 12:35 (KIX), 2ч 50м',
+                        '🚆 Трансфер KIX → Киото: Nankai + JR (~1.5ч), с чемоданами',
+                        '🏨 Заселение в Tokyu Stay Kyoto (чекин с 15:00)',
+                        'Вечерняя прогулка по ближайшему району'
                     ],
-                    notes: 'День переезда в Японию! Ранний подъем, успеем заселиться и погулять вечером.'
+                    notes: '🧳 СОБИРАЕМ ВЕЩИ! Ранний выезд — вылет в 08:45. Такси/метро в аэропорт. 🏨 НОЧУЕМ: Tokyu Stay Kyoto.'
                 },
                 {
                     number: 5,
@@ -848,26 +1229,31 @@
                     city: 'Киото',
                     intensity: 'hard',
                     activities: [
-                        'Храмы Киото',
-                        'Хигасияма',
+                        'Fushimi Inari (рано утром — до толпы)',
+                        'Хигасияма — прогулка по старым улочкам',
                         'Киёмидзу-дэра',
                         'Район Гион',
-                        'Fushimi Inari (рано утром или на закате)'
+                        '🤼 Вечер: Sumo Show — шоу + ужин + гейша + ринг (<a href="https://www.getyourguide.com/en-gb/kyoto-l96826/kyoto-sumo-show-experience-with-chicken-hot-pot-souvenir-t1147281/" target="_blank">GetYourGuide, от $64</a>)',
+                        '🏨 Возвращение в Tokyu Stay Kyoto'
                     ],
-                    notes: 'Насыщенный день с храмами и садами'
+                    notes: '🏨 НОЧУЕМ: Tokyu Stay Kyoto. Чемоданы не нужны — никуда не едем. Sumo Show вечером — забронировать заранее, прийти за 20 мин до начала.'
                 },
                 {
                     number: 6,
                     date: '18 марта',
                     weekday: 'среда',
-                    city: 'Киото',
+                    city: 'Киото — Арасияма',
                     intensity: 'medium',
                     activities: [
-                        'Фотосессия в кимоно',
-                        'Прогулка по традиционным районам',
-                        'Дополнительные храмы по желанию'
+                        '🚌 Выезд в Арасияму: автобус №28 от центра Киото (~40 мин) или поезд Sagano Line',
+                        'Фотосессия в кимоно (надеть с утра — идти по Арасияме в нём!)',
+                        'Бамбуковый лес Арасияма (лучше прийти до 8 утра — меньше людей)',
+                        'Мост Тогэцукё через реку Ои — панорама с горами',
+                        'Kimono Forest у станции Randen Arashiyama (600 столбов в ткани кимоно)',
+                        'Храм Тэнрюдзи и сад в стиле дзен (по желанию)',
+                        '🚌 Возвращение в Киото вечером — в тот же отель'
                     ],
-                    notes: 'Забронировать кимоно заранее!'
+                    notes: '🏨 НОЧУЕМ: Tokyu Stay Kyoto. Чемоданы не нужны — это дневная вылазка, возвращаемся вечером. Забронировать кимоно заранее!'
                 },
                 {
                     number: 7,
@@ -876,12 +1262,11 @@
                     city: 'Осака (Universal)',
                     intensity: 'hard',
                     activities: [
-                        'Поездка в Universal Studios Japan',
-                        'Дневной выезд из Киото (~30 мин на поезде)',
-                        'Весь день в парке',
-                        'Возвращение в Киото вечером'
+                        '🚆 Выезд из Киото в Осаку: поезд JR (~30 мин, ¥560)',
+                        '🎢 Весь день в Universal Studios Japan',
+                        '🚆 Возвращение в Киото вечером: поезд JR (~30 мин)'
                     ],
-                    notes: 'День в Universal Studios! Купить билеты заранее.'
+                    notes: '🏨 НОЧУЕМ: Tokyu Stay Kyoto. Чемоданы не нужны — дневная вылазка в Осаку, вечером возвращаемся. Купить билеты в USJ заранее!'
                 },
                 {
                     number: 8,
@@ -890,13 +1275,14 @@
                     city: 'Хиросима',
                     intensity: 'medium',
                     activities: [
-                        'Выезд из Киото → Хиросима (синкансэн)',
-                        'Заселение в Oriental Hotel Hiroshima (c 24:00)',
+                        '🧳 ВЫЕЗД ИЗ ОТЕЛЯ — чекаут до 11:00, едем с чемоданами',
+                        '🚄 Синкансэн Киото → Хиросима (~1ч 20м, JR West Pass)',
+                        '🏨 Заселение в Oriental Hotel Hiroshima, оставить вещи',
                         'Мемориальный парк мира',
                         'Купол атомной бомбы',
-                        'Вечерняя прогулка'
+                        'Вечерняя прогулка по Хиросиме'
                     ],
-                    notes: 'Переезд в Хиросиму. Один из самых сильных дней поездки.'
+                    notes: '🧳 СОБИРАЕМ ВЕЩИ! Чекаут утром. 🏨 НОЧУЕМ: Oriental Hotel Hiroshima.'
                 },
                 {
                     number: 9,
@@ -905,12 +1291,13 @@
                     city: 'Хиросима',
                     intensity: 'hard',
                     activities: [
-                        'Утром паром на Миядзиму',
-                        'Святилище Ицукусима',
-                        'Прогулка по острову',
-                        'Возвращение в Хиросиму'
+                        '⛴️ Паром из Хиросимы на остров Миядзима (~25 мин, ¥200)',
+                        'Святилище Ицукусима и знаменитые "плавающие" ворота Тории',
+                        'Прогулка по острову, олени',
+                        '⛴️ Паром обратно в Хиросиму',
+                        '🏨 Возвращение в Oriental Hotel Hiroshima'
                     ],
-                    notes: 'Целый день на острове Миядзима'
+                    notes: '🏨 НОЧУЕМ: Oriental Hotel Hiroshima. Чемоданы не нужны — дневная вылазка на остров, вечером возвращаемся. Завтра переезд — собрать вещи с вечера!'
                 },
                 {
                     number: 10,
@@ -919,12 +1306,13 @@
                     city: 'Беппу',
                     intensity: 'light',
                     activities: [
-                        'Утренний переезд Хиросима → Беппу',
-                        'Заселение в Amanek Beppu (c 15:00)',
-                        'Приватный онсен',
-                        'Релакс'
+                        '🧳 ВЫЕЗД ИЗ ОТЕЛЯ — чекаут до 11:00, едем с чемоданами',
+                        '🚄 Поезд Хиросима → Беппу (~3.5ч, с пересадкой в Кокуре, JR Pass)',
+                        '🏨 Заселение в Amanek Beppu (чекин с 15:00, вещи оставить при раннем приезде)',
+                        'Приватный онсен в отеле',
+                        '♨️ Вечер: Hyotan Onsen — приватная семейная ванна (Мишлен 3★, забронировать за неделю: +81-977-67-3010)'
                     ],
-                    notes: 'Начало онсен-релакса!'
+                    notes: '🧳 СОБИРАЕМ ВЕЩИ! 🏨 НОЧУЕМ: Amanek Beppu Yula-Re. Hyotan Onsen работает до 01:00 ночи — можно пойти вечером после заселения.'
                 },
                 {
                     number: 11,
@@ -933,11 +1321,13 @@
                     city: 'Беппу',
                     intensity: 'light',
                     activities: [
-                        'Полный день онсенов',
-                        'Прогулки по природе',
-                        'Отдых и релакс'
+                        '♨️ Hyotan Onsen — большой публичный онсен, песочная ванна, водопадная баня (<a href="https://www.hyotan-onsen.com/english/onsen/family.html" target="_blank">hyotan-onsen.com</a>)',
+                        '🚌 Район Каннава — автобус от Беппу (~15 мин), адские источники (Jigoku), пар из земли',
+                        'Прогулка по природе',
+                        'Релакс и отдых',
+                        '🏨 Ночуем в Amanek Beppu'
                     ],
-                    notes: 'Продолжаем наслаждаться онсенами'
+                    notes: '🏨 НОЧУЕМ: Amanek Beppu. Чемоданы не нужны — никуда не едем. Завтра переезд — собрать вещи с вечера! Hyotan Onsen: ¥2,400 / 90 мин приватная ванна, принести полотенца.'
                 },
                 {
                     number: 12,
@@ -946,11 +1336,12 @@
                     city: 'Кумамото',
                     intensity: 'light',
                     activities: [
-                        'Переезд Беппу → Кумамото',
-                        'Заселение в отель',
-                        'Прогулка по городу'
+                        '🧳 ВЫЕЗД ИЗ ОТЕЛЯ — чекаут до 11:00, едем с чемоданами',
+                        '🚄 Поезд Беппу → Кумамото (~2ч, JR Kyushu Pass)',
+                        '🏨 Заселение в отель Кумамото',
+                        'Замок Кумамото и прогулка по городу'
                     ],
-                    notes: 'Переезд в новую базу - Кумамото'
+                    notes: '🧳 СОБИРАЕМ ВЕЩИ! 🏨 НОЧУЕМ: отель в Кумамото.'
                 },
                 {
                     number: 13,
@@ -959,13 +1350,14 @@
                     city: 'Кумамото / Асо',
                     intensity: 'hard',
                     activities: [
-                        'Поездка на вулкан Асо',
-                        'Кальдера',
+                        '🚆 Выезд на вулкан Асо: поезд JR Hōhi Line Кумамото → Асо (~1ч 20м)',
+                        'Кальдера Асо — крупнейший вулкан Японии',
                         'Смотровые площадки',
-                        'Кратер (если открыт)',
-                        'Возвращение в Кумамото'
+                        'Кратер (если открыт — проверить накануне)',
+                        '🚆 Возвращение в Кумамото вечером (~1ч 20м)',
+                        '🏨 Возвращение в отель Кумамото'
                     ],
-                    notes: 'Самый "вау-природный" день!'
+                    notes: '🏨 НОЧУЕМ: отель в Кумамото. Чемоданы не нужны — дневная вылазка, вечером возвращаемся. Самый "вау-природный" день!'
                 },
                 {
                     number: 14,
@@ -974,11 +1366,12 @@
                     city: 'Юг Кюсю',
                     intensity: 'hard',
                     activities: [
-                        'Поездка на юг острова Кюсю',
-                        'Вулкан (название уточняется)',
-                        'Природные достопримечательности'
+                        '🚆 Выезд из Кумамото на юг Кюсю (маршрут уточняется)',
+                        'Природные достопримечательности',
+                        '🚆 Возвращение в Кумамото вечером',
+                        '🏨 Возвращение в отель Кумамото'
                     ],
-                    notes: 'Исследуем южную часть Кюсю'
+                    notes: '🏨 НОЧУЕМ: отель в Кумамото. Чемоданы не нужны — дневная вылазка. Завтра переезд в Осаку — собрать вещи с вечера!'
                 },
                 {
                     number: 15,
@@ -987,12 +1380,13 @@
                     city: 'Осака',
                     intensity: 'medium',
                     activities: [
-                        'Переезд Кумамото → Осака (на поездах)',
-                        'Заселение в отель',
-                        'Прогулка по городу',
-                        'Последние покупки'
+                        '🧳 ВЫЕЗД ИЗ ОТЕЛЯ — чекаут до 11:00, едем с чемоданами',
+                        '🚄 Синкансэн Кумамото → Осака (~2.5ч, JR Pass)',
+                        '🏨 Заселение в отель Осака',
+                        'Прогулка по Осаке — Дотомбори, Синсайбаси',
+                        '🛍️ Последние покупки и сувениры'
                     ],
-                    notes: 'Возвращение в Осаку перед вылетом'
+                    notes: '🧳 СОБИРАЕМ ВЕЩИ! 🏨 НОЧУЕМ: отель в Осаке. Завтра РАННИЙ выезд в аэропорт — собрать вещи с вечера!'
                 },
                 {
                     number: 16,
@@ -1001,15 +1395,13 @@
                     city: 'Пекин',
                     intensity: 'light',
                     activities: [
-                        'Выезд из отеля до 11:00',
-                        '✈️ Вылет Осака → Пекин',
-                        'Вылет: 14:35 (KIX)',
-                        'Прилет: 17:30 (PEK)',
-                        'В пути: 3ч 55м',
-                        'Трансфер в отель в Пекине',
-                        'Заселение, ночь в Пекине'
+                        '🧳 ВЫЕЗД ИЗ ОТЕЛЯ — чекаут до 11:00, едем с чемоданами',
+                        '🚆 Поезд в аэропорт KIX: Haruka Express (~75 мин) или такси',
+                        '✈️ Осака → Пекин: 14:35 (KIX) → 17:30 (PEK), 3ч 55м',
+                        '🚇 Трансфер из PKX в отель Пекина (Airport Express → метро)',
+                        '🏨 Ночь в отеле Пекина'
                     ],
-                    notes: 'День вылета из Японии. Последняя ночь в Пекине перед домой.'
+                    notes: '🧳 СОБИРАЕМ ВСЕ ВЕЩИ! 🏨 НОЧУЕМ: отель в Пекине. Завтра — разлетаемся домой.'
                 },
                 {
                     number: 17,
@@ -1018,19 +1410,28 @@
                     city: 'Домой',
                     intensity: 'light',
                     activities: [
-                        '✈️ Вылет из Пекина домой',
-                        'Таня → Москва:',
-                        '  Вылет 11:40 (PKX) → Прилет 14:55 (SVO)',
-                        '  Air China, 8ч 15м',
-                        'Катя → Мадрид (через Абу-Даби):',
-                        '  Вылет 19:50 (PKX) → 00:40 (AUH)',
-                        '  Затем 14:05 (AUH) → 19:40 (MAD)',
-                        '  Etihad Airways'
+                        '🧳 ВЫЕЗД ИЗ ОТЕЛЯ с чемоданами — каждая в свой аэропорт',
+                        '✈️ Таня: Пекин → Москва: 11:40 (PKX) → 14:55 (SVO), Air China, 8ч 15м',
+                        '✈️ Катя: Пекин → Абу-Даби → Мадрид: 19:50 (PKX) → 00:40 (AUH), далее 14:05 → 19:40 (MAD), Etihad'
                     ],
-                    notes: 'Возвращение домой. Таня летит утром, Катя вечером.'
+                    notes: '🧳 СОБИРАЕМ ВСЕ ВЕЩИ! Таня выезжает утром (~09:00), Катя — во второй половине дня. Разлетаемся по домам!'
                 }
             ],
             accommodation: [
+                { 
+                    city: 'Пекин', 
+                    hotel: 'Jingshan Garden Hotel (景山花园酒店)', 
+                    address: 'No. 68 C, Sanyanjing Hutong, Dongcheng District, Beijing',
+                    dates: '14-16 марта',
+                    checkIn: '14:00',
+                    checkOut: '12:00',
+                    breakfast: 'Да ✓',
+                    cost: '€198 (CNY 1,614)',
+                    bookingNumber: '6526.601.300',
+                    link: 'https://www.booking.com/hotel/cn/red-wall-jingshan-garden.en-gb.html',
+                    phone: '+86 10 8404 7979',
+                    photo: 'photos/beijing-hotel-room.png'
+                },
                 { 
                     city: 'Киото', 
                     hotel: 'Tokyu Stay Kyoto Sanjo-Karasuma', 
@@ -1249,6 +1650,7 @@
                     <td data-label="Отель">
                         ${item.link ? `<a href="${item.link}" target="_blank">${item.hotel}</a>` : item.hotel}
                         ${item.note ? `<br><small style="color: #856404;">${item.note}</small>` : ''}
+                        ${item.photo ? `<img class="hotel-thumb" src="${item.photo}" alt="Фото номера" onclick="event.stopPropagation(); openLightbox('${item.photo}')" title="Нажми для увеличения">` : ''}
                     </td>
                     <td data-label="Адрес" style="font-size: 0.85em;">${item.address}</td>
                     <td data-label="Даты">${item.dates}</td>
@@ -1279,7 +1681,36 @@
 
 
 
+        // Info Grid Toggle
+        function toggleInfoCard(id) {
+            const detail = document.getElementById('detail-' + id);
+            const cards = document.querySelectorAll('.info-grid-card');
+            const details = document.querySelectorAll('.info-grid-detail');
+            const isOpen = detail.classList.contains('open');
+
+            details.forEach(d => d.classList.remove('open'));
+            cards.forEach(c => c.classList.remove('open'));
+
+            if (!isOpen) {
+                detail.classList.add('open');
+                const cardIndex = ['jr', 'luggage', 'currency', 'transport', 'apps', 'sos', 'meds'].indexOf(id);
+                if (cardIndex >= 0) cards[cardIndex].classList.add('open');
+                setTimeout(() => detail.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
+            }
+        }
+
         // Navigation Functions
+        function openLightbox(src) {
+            document.getElementById('lightboxImg').src = src;
+            document.getElementById('lightboxOverlay').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeLightbox() {
+            document.getElementById('lightboxOverlay').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
         function scrollToSection(sectionId) {
             document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
         }
