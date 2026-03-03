@@ -839,6 +839,7 @@
             <button class="nav-btn" onclick="scrollToSection('tori-map')">Тори Чан</button>
             <button class="nav-btn" onclick="scrollToSection('days')">Маршрут</button>
             <button class="nav-btn" onclick="scrollToSection('accommodation')">Жильё</button>
+            <button class="nav-btn" onclick="scrollToSection('activities')">Активности</button>
             <button class="nav-btn" onclick="scrollToSection('useful')">Полезное</button>
         </div>
 
@@ -897,6 +898,150 @@
             </div>
         </section>
 
+        <!-- Activities Section -->
+        <section id="activities" class="info-card">
+            <h2 class="info-card-title">🎌 Активности</h2>
+
+            <div class="info-grid" id="activitiesGrid">
+                <div class="info-grid-card" onclick="toggleActivitiesCard('wall')">
+                    <div class="card-icon">🏯</div>
+                    <div class="card-title">Великая стена</div>
+                </div>
+                <div class="info-grid-card" onclick="toggleActivitiesCard('kimono')">
+                    <div class="card-icon">🎎</div>
+                    <div class="card-title">Кимоно</div>
+                </div>
+                <div class="info-grid-card" onclick="toggleActivitiesCard('onsen')">
+                    <div class="card-icon">♨️</div>
+                    <div class="card-title">Онсен</div>
+                </div>
+                <div class="info-grid-card" onclick="toggleActivitiesCard('sumo')">
+                    <div class="card-icon">🤼</div>
+                    <div class="card-title">Sumo Show</div>
+                </div>
+                <div class="info-grid-card" onclick="toggleActivitiesCard('universal')">
+                    <div class="card-icon">🎢</div>
+                    <div class="card-title">Universal Studios</div>
+                </div>
+                <div class="info-grid-card" onclick="toggleActivitiesCard('aquarium')">
+                    <div class="card-icon">🐟</div>
+                    <div class="card-title">Океанариум</div>
+                </div>
+                <div class="info-grid-card" onclick="toggleActivitiesCard('aso')">
+                    <div class="card-icon">🌋</div>
+                    <div class="card-title">Вулкан Асо</div>
+                </div>
+
+                <div class="info-grid-detail" id="act-detail-wall">
+                    <h4>Великая китайская стена — Мутяньюй</h4>
+                    <p style="margin-bottom: 12px;">Запланировано на День 3 (15 марта, Пекин). Мутяньюй — самый живописный и менее людный участок стены.</p>
+                    <ul>
+                        <li><strong>Бронировать:</strong> <a href="https://www.getyourguide.com/en-gb/beijing-l186/from-beijing-mutianyu-great-wall-tours-with-options-t165345/" target="_blank">GetYourGuide — Mutianyu Great Wall Tour</a></li>
+                        <li><strong>Что включено:</strong> трансфер из Пекина и обратно, гид, вход на стену (в зависимости от варианта)</li>
+                        <li><strong>Длительность:</strong> ~7–8 часов с дорогой</li>
+                        <li><strong>Фишка Мутяньюй:</strong> канатная дорога наверх + тобоган (лоток-горка) вниз — незабываемо!</li>
+                        <li><strong>Лучшее время:</strong> утро в будни — меньше туристов, лучший свет для фото</li>
+                        <li><strong>Как добраться самостоятельно:</strong> автобус №916 с Dongzhimen + шаттл, ~2ч. Или такси/DiDi ~1.5ч, ~CNY 300–400 (~€38–50)</li>
+                    </ul>
+                    <p style="font-size: 0.85em; color: #888; margin-top: 10px;">💡 В марте на стене прохладно — взять куртку. Канатная дорога работает с ~8:30</p>
+                </div>
+
+                <div class="info-grid-detail" id="act-detail-kimono">
+                    <h4>Кимоно + фотосессия</h4>
+                    <p style="margin-bottom: 12px;">Арендовать кимоно и прогуляться по Гиону или Арасияме — одно из самых красивых впечатлений в Киото.</p>
+                    <ul>
+                        <li><strong>Рекомендуем:</strong> тур с фотосессией в Гионе и Киёмидзу-дэра — кимоно + юката + причёска + профессиональный фотограф. <a href="https://www.getyourguide.com/en-gb/kyoto-l96826/kyoto-gion-kiyomizudera-kimono-yukata-hairstyle-photoshoot-t770979/" target="_blank">GetYourGuide — от $64</a></li>
+                        <li><strong>Просто аренда без фото:</strong> ¥3,000–6,000 (~€19–38) на день. Магазины у Фусими Инари, Гиона, Арасиямы — <a href="https://www.kimono-rentalwargo.com/" target="_blank">Wargo</a></li>
+                        <li><strong>Что входит:</strong> кимоно, пояс оби, носки таби, сандалии гета, причёска</li>
+                        <li><strong>Время аренды:</strong> обычно с 9:00 до 17:00–18:00</li>
+                        <li><strong>Лучше утром в будни</strong> — меньше людей, красивее фотографии</li>
+                    </ul>
+                    <p style="font-size: 0.85em; color: #888; margin-top: 10px;">💡 Бронировать заранее онлайн — в сезон сакуры всё разбирают</p>
+                </div>
+
+                <div class="info-grid-detail" id="act-detail-onsen">
+                    <h4>Онсены — горячие источники</h4>
+                    <p style="margin-bottom: 12px;">Купание в онсене — культурный ритуал. Соблюдай правила, и это станет медитацией.</p>
+                    <ul>
+                        <li><strong>Правила:</strong> полностью раздеться, тщательно помыться под душем ДО входа в бассейн. Татуировки — уточнять заранее</li>
+                        <li><strong><a href="https://www.hyotan-onsen.com/english/onsen/roten.html" target="_blank">Hyotan Onsen (Беппу)</a></strong> ⭐ 3 звезды Мишлен. Открытый онсен под небом, песочная ванна, водопадная баня, паровая баня. Работает 09:00–01:00</li>
+                        <li><strong>Приватная семейная ванна</strong> в Hyotan — ~¥2,400 (~€15) / 90 мин. Бронировать: +81-977-67-3010</li>
+                        <li><strong>Беппу Jigoku</strong> — «Адские источники» — 8 кипящих гейзеров разных цветов. Экскурсия, не для купания</li>
+                        <li><strong>Педикюрный онсен</strong> — опустить только ноги. Есть прямо на улице в Беппу — бесплатно</li>
+                    </ul>
+                    <p style="font-size: 0.85em; color: #888; margin-top: 10px;">⚠️ Полотенца обычно нужно взять с собой или арендовать на месте (¥100–200, ~€1)</p>
+                </div>
+
+                <div class="info-grid-detail" id="act-detail-sumo">
+                    <h4>Sumo Show — Киото</h4>
+                    <p style="margin-bottom: 12px;">Вечернее шоу: борьба сумо + горячий горшочек (chicken hot pot) + выступление гейши + фото у ринга.</p>
+                    <ul>
+                        <li><strong>Где:</strong> Киото, вечер Дня 5 (17 марта)</li>
+                        <li><strong>Цена:</strong> от $64 на человека</li>
+                        <li><strong>Что включено:</strong> шоу сумо, ужин, выступление гейши, сувенир, фото у ринга</li>
+                        <li><strong>Длительность:</strong> ~2–2.5 часа</li>
+                        <li><strong>Бронировать заранее:</strong> <a href="https://www.getyourguide.com/en-gb/kyoto-l96826/kyoto-sumo-show-experience-with-chicken-hot-pot-souvenir-t1147281/" target="_blank">GetYourGuide — Kyoto Sumo Show</a></li>
+                    </ul>
+                    <p style="font-size: 0.85em; color: #888; margin-top: 10px;">💡 Прийти за 20 минут до начала</p>
+                </div>
+
+                <div class="info-grid-detail" id="act-detail-universal">
+                    <h4>Universal Studios Japan — Осака</h4>
+                    <p style="margin-bottom: 12px;">Запланировано на День 7 (19 марта). Ехать из Киото ~30 мин на поезде JR.</p>
+                    <ul>
+                        <li><strong>Главные зоны:</strong> Harry Potter (Хогсмид!), Nintendo World, Minion Park, Jurassic World</li>
+                        <li><strong>Nintendo World</strong> — надеть браслет Power-Up Band = интерактивная игра по всему парку</li>
+                        <li><strong>Билеты:</strong> от ¥8,600 (~€54). <a href="https://www.usj.co.jp/web/en/us" target="_blank">Официальный сайт USJ</a></li>
+                        <li><strong>Express Pass:</strong> от ¥4,000 (~€25) доп. — пропускает очереди. В сезон сакуры очереди огромные — рекомендуем</li>
+                        <li><strong>Купить заранее</strong> — билеты в пик сезона раскупаются</li>
+                        <li><strong>Как добраться:</strong> из Киото — JR Kyoto Line → JR Sakurajima Line, ~30 мин, ¥560 (~€4)</li>
+                    </ul>
+                    <p style="font-size: 0.85em; color: #888; margin-top: 10px;">🕗 Парк открывается в 8:00–9:00. Приходи к открытию — к полудню очереди вырастают вдвое</p>
+                </div>
+
+                <div class="info-grid-detail" id="act-detail-aquarium">
+                    <h4>Osaka Aquarium Kaiyukan — Океанариум</h4>
+                    <p style="margin-bottom: 12px;">Один из крупнейших аквариумов в мире. Главная звезда — китовая акула.</p>
+                    <ul>
+                        <li><strong>Где:</strong> Осака, район Темпозан (Tempozan). 15 мин от центра на метро</li>
+                        <li><strong>Билеты:</strong> ¥2,700 (~€17) взрослый. <a href="https://www.kaiyukan.com/language/eng/" target="_blank">kaiyukan.com</a></li>
+                        <li><strong>Часы работы:</strong> 10:00–20:00 (последний вход в 19:00)</li>
+                        <li><strong>Что внутри:</strong> 15 гигантских аквариумов, китовая акула, скаты, дельфины, пингвины, тюлени</li>
+                        <li><strong>Рядом:</strong> колесо обозрения Tempozan — панорама Осаки. Можно совместить</li>
+                    </ul>
+                    <p style="font-size: 0.85em; color: #888; margin-top: 10px;">💡 Хорошо сочетается с поездкой в USJ — оба в Осаке, можно сделать в один день если выехать рано</p>
+                </div>
+
+                <div class="info-grid-detail" id="act-detail-aso">
+                    <h4>Вулкан Асо — однодневный тур</h4>
+                    <p style="margin-bottom: 14px;">Кальдера Асо — крупнейший действующий вулкан Японии. Два варианта тура на выбор — оба ~10 часов.</p>
+
+                    <h4 style="margin-top: 4px;">🅐 Тур из Фукуоки / Кумамото</h4>
+                    <p style="margin-bottom: 8px;">Асо + святилище Камисикими Кумано + онсен Куросава. Маленькая группа, гид на английском.</p>
+                    <ul>
+                        <li><strong>Программа:</strong> Кратер Асо → Святилище Kamishikimi Kumanoimasu (прообраз из аниме «Hotarubi no Mori e») → Онсен Kurokawa</li>
+                        <li><strong>Отправление:</strong> из Фукуоки или Кумамото</li>
+                        <li><strong>Длительность:</strong> ~10 часов</li>
+                        <li><strong>Рейтинг:</strong> 4.9 / 5 (3 100+ отзывов, 20 000+ поездок)</li>
+                        <li>🔗 <a href="https://www.klook.com/en-US/activity/97199-mount-aso-kamishikimi-kumanoimasu-shrine-kurokawa-onsen-join-one-day-car-tour-small-group-fukuoka/" target="_blank">Klook — Тур А (из Фукуоки)</a></li>
+                    </ul>
+
+                    <h4 style="margin-top: 18px;">🅑 Тур из Кумамото — Такатихо + Асо</h4>
+                    <p style="margin-bottom: 8px;">Ущелье Такатихо + поездка на горном поезде + плато Кусасэнри + кратер Асо.</p>
+                    <ul>
+                        <li><strong>Программа:</strong> Ущелье Такатихо (прогулка на лодке опционально) → Горный поезд Takachiho Railway → Плато Kusasenri → Кратер Асо</li>
+                        <li><strong>Отправление:</strong> из Кумамото</li>
+                        <li><strong>Длительность:</strong> ~10 часов</li>
+                        <li><strong>Рейтинг:</strong> 4.9 / 5 (160+ отзывов)</li>
+                        <li>🔗 <a href="https://www.klook.com/en-US/activity/174070-takachiho-gorge-boat-ride-railway-kusasenri-aso-volcano-day-trip/" target="_blank">Klook — Тур Б (из Кумамото)</a></li>
+                    </ul>
+
+                    <p style="font-size: 0.85em; color: #888; margin-top: 14px;">⚠️ Кратер может быть закрыт при плохой погоде или высокой вулканической активности — уточнять накануне. Взять тёплую одежду, на вершине холодно даже в марте.</p>
+                </div>
+
+            </div>
+        </section>
+
         <!-- Useful Info Section -->
         <section id="useful" class="info-card">
             <h2 class="info-card-title">📋 Полезное</h2>
@@ -937,6 +1082,18 @@
                 <div class="info-grid-card" onclick="toggleInfoCard('dictionary')">
                     <div class="card-icon">🗣️</div>
                     <div class="card-title">Японский</div>
+                </div>
+                <div class="info-grid-card" onclick="toggleInfoCard('food')">
+                    <div class="card-icon">🍜</div>
+                    <div class="card-title">Гастрономия</div>
+                </div>
+                <div class="info-grid-card" onclick="toggleInfoCard('shopping')">
+                    <div class="card-icon">🛍️</div>
+                    <div class="card-title">Шоппинг</div>
+                </div>
+                <div class="info-grid-card" onclick="toggleInfoCard('dutyfree')">
+                    <div class="card-icon">🛃</div>
+                    <div class="card-title">Duty Free</div>
                 </div>
 
                 <div class="info-grid-detail" id="detail-jr">
@@ -982,7 +1139,7 @@
                         <li><strong>7-Eleven / Lawson / Family Mart:</strong> Банкоматы принимают иностранные карты (Visa/Mastercard)</li>
                         <li><strong>Почта (Japan Post):</strong> Банкоматы в отделениях — хороший курс, без комиссии</li>
                         <li><strong>Наличные важны:</strong> Многие маленькие заведения, храмы и онсены принимают только кэш</li>
-                        <li><strong>Рекомендация:</strong> Иметь при себе ¥30,000–50,000 наличными на человека</li>
+                        <li><strong>Рекомендация:</strong> Иметь при себе ¥30,000–50,000 (~€188–313) наличными на человека</li>
                     </ul>
                 </div>
 
@@ -1126,10 +1283,49 @@
                     <ul>
                         <li>eSIM поддерживается на iPhone XR и новее</li>
                         <li>Samsung Galaxy S20+, Google Pixel 4 и новее</li>
-                        <li>Если телефон не поддерживает eSIM — купить физическую туристическую SIM в аэропорту Кансай (KIX) по прилёту (~¥2,500 / 30 дней, только Япония)</li>
+                        <li>Если телефон не поддерживает eSIM — купить физическую туристическую SIM в аэропорту Кансай (KIX) по прилёту (~¥2,500 (~€16) / 30 дней, только Япония)</li>
                     </ul>
 
                     <p style="font-size: 0.85em; color: #888; margin-top: 12px;">* Цены ориентировочные на момент составления гайда, уточняйте в приложении Airalo перед покупкой.</p>
+                </div>
+
+                <div class="info-grid-detail" id="detail-food">
+                    <h4>Гастрономические впечатления</h4>
+                    <ul>
+                        <li><strong>Омакасэ-суши</strong> — сет по выбору шефа. Дорого (от ¥15,000, ~€94), но незабываемо. Бронировать за 1–2 месяца через <a href="https://omakase.in/" target="_blank">omakase.in</a></li>
+                        <li><strong>Рамен-тур</strong> — у каждого города свой стиль: в Киото — светлый куриный, в Осаке — пряный тонкоцу. Ищи очереди — значит вкусно</li>
+                        <li><strong>Такояки</strong> — шарики с осьминогом на улице, особенно в Осаке (район Дотомбори). ~¥500–800 (~€3–5) за порцию</li>
+                        <li><strong>Никuman (肉まん)</strong> — горячие булочки с мясом из конбини, идеально в прохладную погоду</li>
+                        <li><strong>Nishiki Market (Киото)</strong> — «кухня Киото», сотни лавочек со свежей едой и закусками</li>
+                        <li><strong>Cooking class</strong> — мастер-класс по приготовлению японской еды. <a href="https://www.airbnb.com/experiences" target="_blank">Airbnb Experiences</a>, от ¥5,000 (~€31)</li>
+                        <li><strong>Матча всё</strong> — мороженое, латте, вагаси (wagashi) — японские сладости к чаю. Лучшее в Удзи (рядом с Киото)</li>
+                    </ul>
+                    <p style="font-size: 0.85em; color: #888; margin-top: 10px;">📱 Tabelog — главный сайт для поиска ресторанов, рейтинг 3.5+ считается очень хорошим</p>
+                </div>
+
+                <div class="info-grid-detail" id="detail-shopping">
+                    <h4>Шоппинг в Японии</h4>
+                    <ul>
+                        <li><strong>Конбини 24/7</strong> — 7-Eleven, Lawson, Family Mart — не просто магазин, а образ жизни. Еда, косметика, горячий кофе, всё</li>
+                        <li><strong>Donki (Don Quijote)</strong> — хаотичный многоэтажный гипермаркет. Сувениры, косметика, снеки, электроника. Работает 24/7</li>
+                        <li><strong>Драгстор (Matsumoto Kiyoshi)</strong> — аптека + косметика. Японский sunscreen, маски, патчи — качество и цены лучше, чем дома</li>
+                        <li><strong>Nishiki Market (Киото)</strong> — рынок уличной еды, специй, чая матча, кухонных ножей</li>
+                        <li><strong>Shinsaibashi / Dotonbori (Осака)</strong> — главная торговая улица. Бренды + уличная еда</li>
+                    </ul>
+                </div>
+
+                <div class="info-grid-detail" id="detail-dutyfree">
+                    <h4>Tax Free / Duty Free</h4>
+                    <p style="margin-bottom: 12px;">В Японии туристы могут вернуть налог с покупок прямо в магазине — это называется <strong>Tax Free</strong> (消費税免除).</p>
+                    <ul>
+                        <li><strong>Условие:</strong> покупка от ¥5,000 (~€31) в одном магазине за один день</li>
+                        <li><strong>Размер скидки:</strong> 10% (стандартная ставка потребительского налога)</li>
+                        <li><strong>Что нужно:</strong> паспорт — обязательно носи с собой на шоппинг</li>
+                        <li><strong>Где работает:</strong> знак «Tax Free» на входе в магазин. Большинство крупных магазинов, Donki, Bic Camera, Yodobashi, Matsumoto Kiyoshi</li>
+                        <li><strong>Как получить:</strong> на кассе скажи «Tax Free, please» и предъяви паспорт. Оформят сразу</li>
+                        <li><strong>Что выгодно брать:</strong> электроника, косметика, парфюмерия, одежда — всё дорогое</li>
+                        <li><strong>Важно:</strong> товары нельзя вскрывать до выезда из Японии (упакуют в пакет со стикером)</li>
+                    </ul>
                 </div>
 
                 <div class="info-grid-detail" id="detail-meds">
@@ -1217,10 +1413,10 @@
                         '🧳 ВЫЕЗД ИЗ ОТЕЛЯ — чекаут до 12:00, едем в аэропорт с чемоданами',
                         '✈️ Пекин → Осака: 08:45 (PEK) → 12:35 (KIX), 2ч 50м',
                         '🚆 Трансфер KIX → Киото: Nankai + JR (~1.5ч), с чемоданами',
-                        '🏨 Заселение в Tokyu Stay Kyoto (чекин с 15:00)',
+                        '🏨 Заселение в 松竹雲 Kyoto Shijo Karasuma (чекин 15:00–22:00)',
                         'Вечерняя прогулка по ближайшему району'
                     ],
-                    notes: '🧳 СОБИРАЕМ ВЕЩИ! Ранний выезд — вылет в 08:45. Такси/метро в аэропорт. 🏨 НОЧУЕМ: Tokyu Stay Kyoto.'
+                    notes: '🧳 СОБИРАЕМ ВЕЩИ! Ранний выезд — вылет в 08:45. Такси/метро в аэропорт. 🏨 НОЧУЕМ: 松竹雲 Kyoto Shijo Karasuma.'
                 },
                 {
                     number: 5,
@@ -1234,9 +1430,9 @@
                         'Киёмидзу-дэра',
                         'Район Гион',
                         '🤼 Вечер: Sumo Show — шоу + ужин + гейша + ринг (<a href="https://www.getyourguide.com/en-gb/kyoto-l96826/kyoto-sumo-show-experience-with-chicken-hot-pot-souvenir-t1147281/" target="_blank">GetYourGuide, от $64</a>)',
-                        '🏨 Возвращение в Tokyu Stay Kyoto'
+                        '🏨 Возвращение в 松竹雲 Kyoto Shijo Karasuma'
                     ],
-                    notes: '🏨 НОЧУЕМ: Tokyu Stay Kyoto. Чемоданы не нужны — никуда не едем. Sumo Show вечером — забронировать заранее, прийти за 20 мин до начала.'
+                    notes: '🏨 НОЧУЕМ: 松竹雲 Kyoto Shijo Karasuma. Чемоданы не нужны — никуда не едем. Sumo Show вечером — забронировать заранее, прийти за 20 мин до начала.'
                 },
                 {
                     number: 6,
@@ -1253,7 +1449,7 @@
                         'Храм Тэнрюдзи и сад в стиле дзен (по желанию)',
                         '🚌 Возвращение в Киото вечером — в тот же отель'
                     ],
-                    notes: '🏨 НОЧУЕМ: Tokyu Stay Kyoto. Чемоданы не нужны — это дневная вылазка, возвращаемся вечером. Забронировать кимоно заранее!'
+                    notes: '🏨 НОЧУЕМ: 松竹雲 Kyoto Shijo Karasuma. Чемоданы не нужны — это дневная вылазка, возвращаемся вечером. Забронировать кимоно заранее!'
                 },
                 {
                     number: 7,
@@ -1262,11 +1458,11 @@
                     city: 'Осака (Universal)',
                     intensity: 'hard',
                     activities: [
-                        '🚆 Выезд из Киото в Осаку: поезд JR (~30 мин, ¥560)',
+                        '🚆 Выезд из Киото в Осаку: поезд JR (~30 мин, ¥560 ~€4)',
                         '🎢 Весь день в Universal Studios Japan',
                         '🚆 Возвращение в Киото вечером: поезд JR (~30 мин)'
                     ],
-                    notes: '🏨 НОЧУЕМ: Tokyu Stay Kyoto. Чемоданы не нужны — дневная вылазка в Осаку, вечером возвращаемся. Купить билеты в USJ заранее!'
+                    notes: '🏨 НОЧУЕМ: 松竹雲 Kyoto Shijo Karasuma. Чемоданы не нужны — дневная вылазка в Осаку, вечером возвращаемся. Купить билеты в USJ заранее!'
                 },
                 {
                     number: 8,
@@ -1291,7 +1487,7 @@
                     city: 'Хиросима',
                     intensity: 'hard',
                     activities: [
-                        '⛴️ Паром из Хиросимы на остров Миядзима (~25 мин, ¥200)',
+                        '⛴️ Паром из Хиросимы на остров Миядзима (~25 мин, ¥200 ~€1)',
                         'Святилище Ицукусима и знаменитые "плавающие" ворота Тории',
                         'Прогулка по острову, олени',
                         '⛴️ Паром обратно в Хиросиму',
@@ -1327,7 +1523,7 @@
                         'Релакс и отдых',
                         '🏨 Ночуем в Amanek Beppu'
                     ],
-                    notes: '🏨 НОЧУЕМ: Amanek Beppu. Чемоданы не нужны — никуда не едем. Завтра переезд — собрать вещи с вечера! Hyotan Onsen: ¥2,400 / 90 мин приватная ванна, принести полотенца.'
+                    notes: '🏨 НОЧУЕМ: Amanek Beppu. Чемоданы не нужны — никуда не едем. Завтра переезд — собрать вещи с вечера! Hyotan Onsen: ¥2,400 (~€15) / 90 мин приватная ванна, принести полотенца.'
                 },
                 {
                     number: 12,
@@ -1434,30 +1630,32 @@
                 },
                 { 
                     city: 'Киото', 
-                    hotel: 'Tokyu Stay Kyoto Sanjo-Karasuma', 
-                    address: 'Nakagyo-ku Kakimotocho 392, Nakagyo Ward, Kyoto, 604-8173',
+                    hotel: '谷町君Hotel 松竹雲 京都四条烏丸', 
+                    address: 'Shimogyo-ku Inabadocho 691, Kyoto',
                     dates: '16-20 марта',
-                    checkIn: '15:00-00:00',
-                    checkOut: '11:00',
+                    checkIn: '15:00-22:00',
+                    checkOut: '08:00-11:00',
                     breakfast: 'Нет',
-                    cost: '€505',
-                    bookingNumber: '6436.677.953',
-                    link: 'https://www.booking.com/hotel/jp/tokyu-stay-kyoto-ryogaemachi-dori.html',
-                    phone: '+81 75 221 0109'
+                    cost: '€462',
+                    bookingNumber: '',
+                    link: 'https://www.booking.com',
+                    phone: '',
+                    photo: 'photos/kyoto-hotel-room.png'
                 },
                 { 
                     city: 'Хиросима', 
                     hotel: 'Oriental Hotel Hiroshima', 
                     address: '6-10 Tanaka-machi, Naka-ku, Hiroshima-shi, Hiroshima Prefecture',
                     dates: '20-22 марта',
-                    checkIn: '24:00 (пятница)',
-                    checkOut: 'воскресенье',
-                    breakfast: 'Нет',
-                    cost: '¥43,918 (купон −¥3,819)',
-                    bookingNumber: '6188178191',
+                    checkIn: '23:00–26:00 (пятница)',
+                    checkOut: '11:00 (воскресенье)',
+                    breakfast: 'Да ✓',
+                    cost: '¥45,551 (~€285) / чел.',
+                    bookingNumber: 'Катя: 6188329018 / Таня: 6188327667',
                     link: 'https://www.booking.com',
                     phone: '082-240-7111',
-                    note: 'Оплата при заселении. Standard Plus Double Room.'
+                    note: 'Оплата при заселении. Standard Plus Double Room.',
+                    photo: 'photos/hiroshima-hotel-room.png'
                 },
                 { 
                     city: 'Беппу', 
@@ -1470,7 +1668,8 @@
                     cost: '€193 (¥34,938)',
                     bookingNumber: '5238.571.378',
                     link: 'https://www.booking.com/hotel/jp/amanekubie-fu-yurari.html',
-                    phone: '+81 977 76 5566'
+                    phone: '+81 977 76 5566',
+                    photo: 'photos/beppu-hotel-room.png'
                 },
                 { 
                     city: 'Кумамото', 
@@ -1483,8 +1682,8 @@
                     cost: '€216 (¥39,172)',
                     bookingNumber: '6191.770.746',
                     link: 'https://www.booking.com/hotel/jp/daiwa-roynet-kumamoto-ginzadori.html',
-                    // TODO: уточнить ссылку на Booking.com
-                    phone: '+81 96 312 0655'
+                    phone: '+81 96 312 0655',
+                    photo: 'photos/kumamoto-hotel-room.png'
                 },
                 { 
                     city: 'Осака', 
@@ -1497,7 +1696,8 @@
                     cost: '€94 (¥17,119)',
                     bookingNumber: '5003.893.835',
                     link: 'https://www.booking.com/hotel/jp/henn-na-hotel-osaka-shinsaibashi.html',
-                    phone: '+81 50 5576 8355'
+                    phone: '+81 50 5576 8355',
+                    photo: 'photos/osaka-hotel-room.png'
                 }
             ]
         };
@@ -1681,11 +1881,12 @@
 
 
 
-        // Info Grid Toggle
-        function toggleInfoCard(id) {
-            const detail = document.getElementById('detail-' + id);
-            const cards = document.querySelectorAll('.info-grid-card');
-            const details = document.querySelectorAll('.info-grid-detail');
+        // Activities Grid Toggle
+        function toggleActivitiesCard(id) {
+            const detail = document.getElementById('act-detail-' + id);
+            const grid = document.getElementById('activitiesGrid');
+            const cards = grid.querySelectorAll('.info-grid-card');
+            const details = grid.querySelectorAll('.info-grid-detail');
             const isOpen = detail.classList.contains('open');
 
             details.forEach(d => d.classList.remove('open'));
@@ -1693,7 +1894,27 @@
 
             if (!isOpen) {
                 detail.classList.add('open');
-                const cardIndex = ['jr', 'luggage', 'currency', 'transport', 'apps', 'sos', 'meds'].indexOf(id);
+                const actIds = ['wall', 'kimono', 'onsen', 'sumo', 'universal', 'aquarium', 'aso'];
+                const cardIndex = actIds.indexOf(id);
+                if (cardIndex >= 0) cards[cardIndex].classList.add('open');
+                setTimeout(() => detail.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
+            }
+        }
+
+        // Info Grid Toggle
+        function toggleInfoCard(id) {
+            const detail = document.getElementById('detail-' + id);
+            const grid = document.getElementById('infoGrid');
+            const cards = grid.querySelectorAll('.info-grid-card');
+            const details = grid.querySelectorAll('.info-grid-detail');
+            const isOpen = detail.classList.contains('open');
+
+            details.forEach(d => d.classList.remove('open'));
+            cards.forEach(c => c.classList.remove('open'));
+
+            if (!isOpen) {
+                detail.classList.add('open');
+                const cardIndex = ['jr', 'luggage', 'currency', 'transport', 'apps', 'sos', 'meds', 'internet', 'dictionary', 'food', 'shopping', 'dutyfree'].indexOf(id);
                 if (cardIndex >= 0) cards[cardIndex].classList.add('open');
                 setTimeout(() => detail.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
             }
