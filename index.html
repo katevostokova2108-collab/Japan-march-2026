@@ -804,6 +804,100 @@
             }
         }
 
+        /* Budget Table */
+        .budget-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-size: 0.95em;
+        }
+
+        .budget-table th {
+            background: #FFF8F0;
+            padding: 12px 15px;
+            text-align: left;
+            color: #FF6B9D;
+            font-weight: 600;
+            border-bottom: 2px solid #FFB7C5;
+        }
+
+        .budget-table th:last-child,
+        .budget-table th:nth-last-child(2) {
+            text-align: right;
+        }
+
+        .budget-table td {
+            padding: 11px 15px;
+            border-bottom: 1px solid #f0f0f0;
+            vertical-align: middle;
+        }
+
+        .budget-table td:last-child,
+        .budget-table td:nth-last-child(2) {
+            text-align: right;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .budget-table tr:hover td {
+            background: #FFF8F0;
+        }
+
+        .budget-table .category-row td {
+            background: linear-gradient(135deg, #FFF0F5 0%, #FFE8F0 100%);
+            color: #FF6B9D;
+            font-weight: 700;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 8px 15px;
+            border-bottom: none;
+            text-align: left !important;
+        }
+
+        .budget-table .category-row:hover td {
+            background: linear-gradient(135deg, #FFF0F5 0%, #FFE8F0 100%);
+        }
+
+        .budget-table .total-row td {
+            background: linear-gradient(135deg, #FFB7C5 0%, #FF6B9D 100%);
+            color: white;
+            font-weight: 700;
+            font-size: 1.05em;
+            padding: 14px 15px;
+            border-bottom: none;
+        }
+
+        .budget-table .total-row:hover td {
+            background: linear-gradient(135deg, #FFB7C5 0%, #FF6B9D 100%);
+        }
+
+        .budget-table .subtotal-row td {
+            background: #FFF8F0;
+            font-weight: 600;
+            color: #666;
+            font-size: 0.88em;
+            border-top: 1px solid #FFB7C5;
+        }
+
+        .budget-note {
+            font-size: 0.82em;
+            color: #aaa;
+            margin-top: 14px;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .budget-table thead { display: none; }
+            .budget-table, .budget-table tbody, .budget-table tr, .budget-table td { display: block; }
+            .budget-table tr { margin-bottom: 8px; border: 1px solid #FFE8E8; border-radius: 10px; padding: 10px; background: white; }
+            .budget-table .category-row { border-radius: 8px; }
+            .budget-table td { padding: 4px 8px; text-align: left !important; border: none; font-size: 0.9em; }
+            .budget-table td:before { content: attr(data-label); font-weight: 600; color: #FF6B9D; display: inline; font-size: 0.8em; margin-right: 6px; }
+            .budget-table .category-row td:before,
+            .budget-table .total-row td:before,
+            .budget-table .subtotal-row td:before { display: none; }
+        }
+
         /* Smooth Scroll */
         html {
             scroll-behavior: smooth;
@@ -840,6 +934,7 @@
             <button class="nav-btn" onclick="scrollToSection('days')">Маршрут</button>
             <button class="nav-btn" onclick="scrollToSection('accommodation')">Жильё</button>
             <button class="nav-btn" onclick="scrollToSection('activities')">Активности</button>
+            <button class="nav-btn" onclick="scrollToSection('budget')">Бюджет</button>
             <button class="nav-btn" onclick="scrollToSection('useful')">Полезное</button>
         </div>
 
@@ -927,6 +1022,10 @@
                     <div class="card-icon">🐟</div>
                     <div class="card-title">Океанариум</div>
                 </div>
+                <div class="info-grid-card" onclick="toggleActivitiesCard('miyajima')">
+                    <div class="card-icon">⛩️</div>
+                    <div class="card-title">Остров Миядзима</div>
+                </div>
                 <div class="info-grid-card" onclick="toggleActivitiesCard('aso')">
                     <div class="card-icon">🌋</div>
                     <div class="card-title">Вулкан Асо</div>
@@ -1012,6 +1111,41 @@
                     <p style="font-size: 0.85em; color: #888; margin-top: 10px;">💡 Хорошо сочетается с поездкой в USJ — оба в Осаке, можно сделать в один день если выехать рано</p>
                 </div>
 
+                <div class="info-grid-detail" id="act-detail-miyajima">
+                    <h4>Остров Миядзима — 21 марта (День 9)</h4>
+
+                    <h4 style="margin-top: 14px;">🚢 Дорога</h4>
+                    <p>Катер <strong>Aqua Net Hiroshima</strong> (World Heritage Sea Route) — отправление 13:30 от Мемориального парка мира → прибытие на Миядзиму 14:15. Живописный маршрут вдоль побережья.</p>
+
+                    <h4 style="margin-top: 14px;">🌊 Приливы 21 марта</h4>
+                    <ul>
+                        <li><strong>11:07</strong> — высокий прилив: тории стоят в воде (лучшие фото утром)</li>
+                        <li><strong>17:21</strong> — отлив: можно дойти до ворот пешком</li>
+                        <li>Вы увидите оба состояния за один день!</li>
+                    </ul>
+
+                    <h4 style="margin-top: 14px;">🗺️ План на острове (~4 часа)</h4>
+                    <table class="price-table">
+                        <tr><th>Время</th><th>Место</th></tr>
+                        <tr><td>14:15</td><td>Прибытие на остров</td></tr>
+                        <tr><td>14:30</td><td>⛩️ Святилище Ицукусима (Itsukushima Shrine)</td></tr>
+                        <tr><td>15:15</td><td>📸 Toyokuni Shrine + Tahoto Pagoda — лучшая точка для фото</td></tr>
+                        <tr><td>16:00</td><td>🌿 Парк Момидзидани (Momijidani Park)</td></tr>
+                        <tr><td>16:45</td><td>🏯 Храм Дайсё-ин (Daisho-in Temple)</td></tr>
+                        <tr><td>17:15–17:30</td><td>🚪 Возвращение к тории — начало отлива, можно подойти вплотную</td></tr>
+                    </table>
+
+                    <h4 style="margin-top: 14px;">🍽️ Ужин на острове</h4>
+                    <ul>
+                        <li><strong>Miyajima Brewery</strong> — крафтовое пиво и местная кухня</li>
+                        <li><strong>Yakigaki No Hayashi</strong> — лучшие устрицы на острове</li>
+                        <li>Попробовать: <strong>Anago Meshi</strong> (угорь на рисе) и <strong>устрицы Хиросимы</strong></li>
+                    </ul>
+
+                    <h4 style="margin-top: 14px;">⛴️ Возвращение</h4>
+                    <p>Паром <strong>JR Miyajima Ferry</strong> каждые ~15 минут до вечера. Можно не торопиться — уехать после ужина. ¥200 (~€1), покрывается JR West Pass.</p>
+                </div>
+
                 <div class="info-grid-detail" id="act-detail-aso">
                     <h4>Вулкан Асо — однодневный тур</h4>
                     <p style="margin-bottom: 14px;">Кальдера Асо — крупнейший действующий вулкан Японии. Два варианта тура на выбор — оба ~10 часов.</p>
@@ -1040,6 +1174,124 @@
                 </div>
 
             </div>
+        </section>
+
+        <!-- Budget Section -->
+        <section id="budget" class="info-card">
+            <h2 class="info-card-title">💰 Бюджет поездки</h2>
+            <p style="text-align:center; color:#888; font-size:0.88em; margin-bottom:18px;">На человека · курс 1 EUR ≈ 100 RUB · 1 EUR ≈ 160 JPY</p>
+            <div style="overflow-x:auto;">
+                <table class="budget-table">
+                    <thead>
+                        <tr>
+                            <th>Категория</th>
+                            <th>Детали</th>
+                            <th>EUR</th>
+                            <th>RUB</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="category-row"><td colspan="4">🏨 Отели</td></tr>
+                        <tr>
+                            <td data-label="Категория">Все отели</td>
+                            <td data-label="Детали">6 отелей, 14 ночей</td>
+                            <td data-label="EUR">€867</td>
+                            <td data-label="RUB">₽86 700</td>
+                        </tr>
+
+                        <tr class="category-row"><td colspan="4">🎌 Активности</td></tr>
+                        <tr>
+                            <td data-label="Категория">Великая стена</td>
+                            <td data-label="Детали">GetYourGuide тур, Пекин</td>
+                            <td data-label="EUR">~€50</td>
+                            <td data-label="RUB">~₽5 000</td>
+                        </tr>
+                        <tr>
+                            <td data-label="Категория">Sumo Show</td>
+                            <td data-label="Детали">GetYourGuide, Киото</td>
+                            <td data-label="EUR">~€59</td>
+                            <td data-label="RUB">~₽5 900</td>
+                        </tr>
+                        <tr>
+                            <td data-label="Категория">Кимоно + фотосессия</td>
+                            <td data-label="Детали">GetYourGuide, Киото</td>
+                            <td data-label="EUR">~€59</td>
+                            <td data-label="RUB">~₽5 900</td>
+                        </tr>
+                        <tr>
+                            <td data-label="Категория">Universal Studios</td>
+                            <td data-label="Детали">Билет, Осака</td>
+                            <td data-label="EUR">~€54</td>
+                            <td data-label="RUB">~₽5 400</td>
+                        </tr>
+                        <tr>
+                            <td data-label="Категория">Вулкан Асо</td>
+                            <td data-label="Детали">Klook тур, Кумамото</td>
+                            <td data-label="EUR">~€50</td>
+                            <td data-label="RUB">~₽5 000</td>
+                        </tr>
+                        <tr>
+                            <td data-label="Категория">Океанариум Осака</td>
+                            <td data-label="Детали">Kaiyukan</td>
+                            <td data-label="EUR">~€17</td>
+                            <td data-label="RUB">~₽1 700</td>
+                        </tr>
+                        <tr>
+                            <td data-label="Категория">Онсен Hyotan</td>
+                            <td data-label="Детали">Приватная ванна, Беппу</td>
+                            <td data-label="EUR">~€8</td>
+                            <td data-label="RUB">~₽800</td>
+                        </tr>
+                        <tr class="subtotal-row">
+                            <td data-label="Категория">Итого активности</td>
+                            <td data-label="Детали"></td>
+                            <td data-label="EUR">~€297</td>
+                            <td data-label="RUB">~₽29 700</td>
+                        </tr>
+
+                        <tr class="category-row"><td colspan="4">🚄 Транспорт</td></tr>
+                        <tr>
+                            <td data-label="Категория">JR West Sanyo Pass</td>
+                            <td data-label="Детали">4 дня · Киото → Хиросима</td>
+                            <td data-label="EUR">€63</td>
+                            <td data-label="RUB">₽6 300</td>
+                        </tr>
+                        <tr>
+                            <td data-label="Категория">JR Kyushu Rail Pass</td>
+                            <td data-label="Детали">All Kyushu · 5 дней</td>
+                            <td data-label="EUR">€112</td>
+                            <td data-label="RUB">₽11 200</td>
+                        </tr>
+                        <tr>
+                            <td data-label="Категория">Перелёты</td>
+                            <td data-label="Детали">—</td>
+                            <td data-label="EUR">?</td>
+                            <td data-label="RUB">?</td>
+                        </tr>
+                        <tr class="subtotal-row">
+                            <td data-label="Категория">Итого транспорт (без перелётов)</td>
+                            <td data-label="Детали"></td>
+                            <td data-label="EUR">€175</td>
+                            <td data-label="RUB">₽17 500</td>
+                        </tr>
+
+                        <tr class="category-row"><td colspan="4">📦 Прочее</td></tr>
+                        <tr>
+                            <td data-label="Категория">eSIM Airalo</td>
+                            <td data-label="Детали">10GB · 30 дней · Япония + Китай</td>
+                            <td data-label="EUR">~€25</td>
+                            <td data-label="RUB">~₽2 500</td>
+                        </tr>
+
+                        <tr class="total-row">
+                            <td colspan="2">ИТОГО (без перелётов)</td>
+                            <td>~€1 364</td>
+                            <td>~₽136 400</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="budget-note">* Цены ориентировочные · активности помечены ~ · перелёты не включены</p>
         </section>
 
         <!-- Useful Info Section -->
@@ -1471,14 +1723,16 @@
                     city: 'Хиросима',
                     intensity: 'medium',
                     activities: [
-                        '🧳 ВЫЕЗД ИЗ ОТЕЛЯ — чекаут до 11:00, едем с чемоданами',
-                        '🚄 Синкансэн Киото → Хиросима (~1ч 20м, JR West Pass)',
-                        '🏨 Заселение в Oriental Hotel Hiroshima, оставить вещи',
+                        '🧳 ВЫЕЗД ИЗ ОТЕЛЯ — чекаут до 11:00. Чемоданы отправить Takkyubin накануне вечером прямо в отель Хиросимы (~¥2,000–3,000 ~€13–19 за чемодан)',
+                        '🚄 Синкансэн Киото → Химэдзи (~45 мин, JR West Pass)',
+                        '🏯 <a href="https://ru.wikipedia.org/wiki/Замок_Химэдзи" target="_blank">Замок Химэдзи (姫路城)</a> — «Белая цапля», объект ЮНЕСКО. 15 мин пешком от станции. Вход ¥1,050 (~€7). 2–3 часа на осмотр',
+                        '🚄 Синкансэн Химэдзи → Хиросима (~40 мин, JR West Pass)',
+                        '🏨 Заселение в Oriental Hotel Hiroshima (чемоданы уже там)',
                         'Мемориальный парк мира',
                         'Купол атомной бомбы',
                         'Вечерняя прогулка по Хиросиме'
                     ],
-                    notes: '🧳 СОБИРАЕМ ВЕЩИ! Чекаут утром. 🏨 НОЧУЕМ: Oriental Hotel Hiroshima.'
+                    notes: '🧳 СОБИРАЕМ ВЕЩИ и отправляем чемоданы Takkyubin с вечера 19 марта — едем налегке! Замок Химэдзи покрыт JR West Pass — доплачивать не нужно. 🏨 НОЧУЕМ: Oriental Hotel Hiroshima.'
                 },
                 {
                     number: 9,
@@ -1487,13 +1741,18 @@
                     city: 'Хиросима',
                     intensity: 'hard',
                     activities: [
-                        '⛴️ Паром из Хиросимы на остров Миядзима (~25 мин, ¥200 ~€1)',
-                        'Святилище Ицукусима и знаменитые "плавающие" ворота Тории',
-                        'Прогулка по острову, олени',
-                        '⛴️ Паром обратно в Хиросиму',
+                        '🚢 13:30 — катер Aqua Net Hiroshima (World Heritage Sea Route) от Мемориального парка мира → Миядзима (прибытие 14:15)',
+                        '🌊 Приливы 21 марта: 11:07 — высокий прилив (тории в воде) · 17:21 — отлив (можно дойти до ворот пешком)',
+                        '⛩️ 14:30 — Святилище Ицукусима (Itsukushima Shrine)',
+                        '📸 15:15 — Смотровая: Toyokuni Shrine + Tahoto Pagoda (лучший вид на тории)',
+                        '🌿 16:00 — Парк Момидзидани (Momijidani Park)',
+                        '🏯 16:45 — Храм Дайсё-ин (Daisho-in Temple)',
+                        '🚪 17:15 — Возвращение к тории: начало отлива → можно подойти к воротам вплотную',
+                        '🍽️ Ужин: Miyajima Brewery или Yakigaki No Hayashi — Anago Meshi и устрицы Хиросимы',
+                        '⛴️ Паром JR Miyajima Ferry обратно в Хиросиму (каждые ~15 мин, ¥200 ~€1)',
                         '🏨 Возвращение в Oriental Hotel Hiroshima'
                     ],
-                    notes: '🏨 НОЧУЕМ: Oriental Hotel Hiroshima. Чемоданы не нужны — дневная вылазка на остров, вечером возвращаемся. Завтра переезд — собрать вещи с вечера!'
+                    notes: '🏨 НОЧУЕМ: Oriental Hotel Hiroshima. Чемоданы не нужны — дневная вылазка на остров. Завтра переезд — собрать вещи с вечера!'
                 },
                 {
                     number: 10,
@@ -1654,7 +1913,6 @@
                     bookingNumber: 'Катя: 6188329018 / Таня: 6188327667',
                     link: 'https://www.booking.com',
                     phone: '082-240-7111',
-                    note: 'Оплата при заселении. Standard Plus Double Room.',
                     photo: 'photos/hiroshima-hotel-room.png'
                 },
                 { 
@@ -1894,7 +2152,7 @@
 
             if (!isOpen) {
                 detail.classList.add('open');
-                const actIds = ['wall', 'kimono', 'onsen', 'sumo', 'universal', 'aquarium', 'aso'];
+                const actIds = ['wall', 'kimono', 'onsen', 'sumo', 'universal', 'aquarium', 'miyajima', 'aso'];
                 const cardIndex = actIds.indexOf(id);
                 if (cardIndex >= 0) cards[cardIndex].classList.add('open');
                 setTimeout(() => detail.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
